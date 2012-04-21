@@ -77,11 +77,6 @@ enterName = ->
     enteredName()
 
   enteredName = ->
-    newName = $('#newname').val()
-    if newName == "Googlohurf Hoodchuck"
-      alert "Oh, come on! That's a horrible name."
-      $('#newname').focus()
-      return
     $nameInsert.find('.first').remove()
     $nameInsert.find('.second').show().on 'click', '.ok', ->
       $nameInsert.remove()
@@ -178,15 +173,15 @@ play2 = ->
   $scene.find('.stars').remove()
   $scene.find('.tentacles').remove()
   message """
-  Getting around this house is impossible! You know it'll take you way longer than two minutes. But you have to try. Your brother might be annoying slash amusing slash cute with his "revelations," but he always makes cool stuff.
+  You and him both know it'll take you way longer than two minutes. Getting around this house is impossible! But you have to try. Your brother might be annoying slash amusing slash cute with his "revelations," but he always makes cool stuff.
   """
   $document.one 'messageend', ->
     message """
     Your mother is extremely private, so she installed switches everywhere to deter anyone from stealing her things (or her kids). She is especially protective of your little brother and never lets him unlock his own door.
 
-    You can't remember the exact sequences to the switches, because she changes them every night. Your mother somehow manages to change them without you noticing. And sometimes, some switches depend on another switch being pressed.
+    You can't remember the exact sequences to the switches, because she changes them every night, somehow without you noticing. And some switches depend on another switch being pressed.
 
-    You have no idea how she keeps track of all these switches in her head. It would be impressive if it wasn't SO INFURIATING.
+    You have no idea how she keeps track of all these switches in her head. It would be so impressive if it wasn't SO INFURIATING.
 
     But first, why don't you turn on the lights?
     """
@@ -260,4 +255,4 @@ scene2 = ->
   """
 
 # Game start
-$ play2
+$ play1
