@@ -1,0 +1,42 @@
+@font-face {
+    font-family: NokiaCellphone;
+    src: url(./fonts/nokiafc22.ttf);
+    font-weight: 300;
+}
+
+html {
+  background: black;
+  color: white;
+}
+
+body {
+  padding: 0;
+  font: 16px NokiaCellphone, Monaco, monospace;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  width: 640px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 300;
+}
+
+#content {
+  position: relative;
+  height: 460px;
+}
+
+#message {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: white;
+  border: 3px solid #eee;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  height: 100px;
+}
