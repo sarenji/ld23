@@ -103,20 +103,21 @@ scene1 = ->
         LL: But then I remembered that by any measurement of the observable universe, our world is tiny.
         """, "LL is typing..."
         $document.one 'messageend', ->
+          $scene.find('.tentacles').removeClass('hidden')
           message """
           LL: And then I started wondering...
           LL: What lies beyond?
           LL: What lies sleeping?
           """, "GQ is typing..."
           $document.one 'messageend', ->
+            $scene.find('.ggcomp').appendTo $scene
             message """
             GQ: uh
             GQ: pretty melodramatic there bro!!
             LL: Okay, well, I guess it's not surprising that you'd act this way.
-            LL: Man, it really sucks not having any other friends than you.
+            LL: But, speaking as your friend, I know you're freaked out.
+            LL: My work here is done.
             """
-
-
 
 # Scene 2
 scene2 = ->
