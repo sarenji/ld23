@@ -39,4 +39,6 @@ h1 {
   -webkit-border-radius: 10px;
   border-radius: 10px;
   height: 100px;
+  color: #333;
+  padding: 14px;
 }
