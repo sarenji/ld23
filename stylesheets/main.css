@@ -24,6 +24,19 @@ h1 {
   height: 460px;
   background: #1a1d1f;
 }
+#content {
+  height: 460px;
+  width: inherit;
+}
+#debug {
+  position: absolute;
+  top: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 640px;
+  margin: 0 auto;
+}
 #message {
   position: absolute;
   top: 100%;
@@ -33,6 +46,14 @@ h1 {
   color: #333;
   background: #ddd;
   padding: 14px;
+}
+#messagehitbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
 }
 #continue {
   float: right;
@@ -59,7 +80,13 @@ p {
 }
 #nameinsert {
   text-align: center;
-  padding-top: 100px;
+  margin-top: 100px;
+  background: rgba(0,0,0,0.50);
+  position: absolute;
+  top: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 #nameinsert p {
   text-shadow: 2px 2px 0 #333;
@@ -86,6 +113,12 @@ a:hover {
 }
 .vt20 {
   margin-top: 20px;
+}
+.pt20 {
+  padding-top: 20px;
+}
+.pb20 {
+  padding-bottom: 20px;
 }
 .stars {
   position: absolute;
@@ -189,6 +222,25 @@ a:hover {
   right: 0;
   bottom: 0;
   background: url("../images/tentacles.gif");
+}
+#play1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/you.gif");
+}
+.yourroom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/yourroom.gif");
+}
+#scene1 .lightswitch {
+  color: #fff;
 }
 @-moz-keyframes bounce {
   0% {

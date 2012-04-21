@@ -53,6 +53,15 @@ h1 {
   background: #1a1d1f;
 }
 
+#content
+  height 460px
+  width inherit
+
+#debug
+  stretch(top: auto)
+  width 640px
+  margin 0 auto
+
 #message {
   stretch(top: 100%, bottom: auto)
   color #333
@@ -60,6 +69,9 @@ h1 {
   padding: 14px;
 }
 
+#messagehitbox
+  stretch()
+  z-index 1
 
 #continue {
   float right
@@ -90,7 +102,9 @@ p {
 
 #nameinsert {
   text-align: center;
-  padding-top: 100px;
+  margin-top: 100px
+  background rgba(0, 0, 0, .5)
+  stretch(top: auto)
 }
 
 #nameinsert p {
@@ -119,6 +133,8 @@ a:hover {
 
 .vt10 { margin-top: 10px; }
 .vt20 { margin-top: 20px; }
+.pt20 { padding-top: 20px; }
+.pb20 { padding-bottom: 20px; }
 
 .stars {
   position: absolute;
@@ -200,3 +216,15 @@ a:hover {
 .tentacles
   stretch()
   background url(../images/tentacles.gif)
+
+#play1
+  stretch()
+  background url(../images/you.gif)
+
+.yourroom
+  stretch()
+  background url(../images/yourroom.gif)
+
+#scene1
+  .lightswitch
+    color white
