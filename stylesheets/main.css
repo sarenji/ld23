@@ -23,9 +23,10 @@ h1 {
   font-weight: 300;
 }
 
-#content {
+#wrapper {
   position: relative;
   height: 460px;
+  background: #1a1d1f;
 }
 
 #message {
@@ -50,4 +51,82 @@ h1 {
   right: 4px;
   color: #aaa;
   font-size: 8px;
+}
+
+p {
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+#newname {
+  width: 75%;
+  margin: 10px auto;
+  display: block;
+  padding: 10px;
+  font: 24px NokiaCellphone, Monaco, monospace;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  text-align: center;
+  color: #333;
+  border: none;
+}
+
+#nameinsert {
+  text-align: center;
+  padding-top: 100px;
+}
+
+#nameinsert p {
+  text-shadow: 2px 2px 0 #333;
+}
+
+a {
+  padding: 10px;
+  box-shadow: 2px 2px 0 #666;
+  background: #f2d666;
+  color: #333;
+  text-shadow: none;
+}
+
+a:hover {
+  background: #ec9c12;
+  cursor: pointer;
+}
+
+/*a:active {
+  position: relative;
+  top: 2px;
+  left: 2px;
+  box-shadow: none;
+}*/
+
+.vt10 { margin-top: 10px; }
+.vt20 { margin-top: 20px; }
+
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url(../images/stars.gif) repeat;
+}
+
+@-webkit-keyframes fromtop {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0 -459px;
+  }
+}
+
+.stars {
+  -webkit-animation-name: fromtop;
+  -webkit-animation-duration: 10s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
 }
