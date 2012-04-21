@@ -1,5 +1,5 @@
 (function() {
-  var $content, $document, $message, colorize, control, debug, enterName, find, hide, hideMessage, introYourRoom, message, play1, play2, scene1, scene2, show, state, turnOnLights,
+  var $content, $document, $message, beginPlaying, colorize, control, debug, enterName, find, game, hide, hideMessage, introYourRoom, message, play1, play2, preloadImage, scene1, scene2, show, state, toLoad, turnOnLights,
     __slice = Array.prototype.slice;
 
   $document = $(document);
@@ -7,6 +7,19 @@
   $message = $("#message");
 
   $content = $("#content");
+
+  toLoad = 0;
+
+  preloadImage = function(path) {
+    var image;
+    toLoad++;
+    image = new Image();
+    $(image).load(function() {
+      toLoad -= 1;
+      if (toLoad === 0) return game();
+    });
+    return image.src = path;
+  };
 
   state = {
     yourDoorLocked: true
@@ -175,57 +188,67 @@
     return $document.one('messageend', function() {
       message("Your mother is extremely private, so she installed switches everywhere to deter anyone from stealing her things (or her kids). She is especially protective of your little brother and never lets him unlock his own door.\n\nYou can't remember the exact sequences to the switches, because she changes them every night, somehow without you noticing. And some switches depend on another switch being pressed.\n\nYou have no idea how she keeps track of all these switches in her head. It would be so impressive if it wasn't SO INFURIATING.\n\nBut first, why don't you turn on the lights?");
       return $document.one('messageend', function() {
-        $scene.find('.doorswitch').removeClass('hidden');
-        $scene.find('.lightswitch').removeClass('hidden');
-        $scene.find('.door').removeClass('hidden');
-        $scene.find('.door').on('click', function() {
-          if (state.yourDoorLocked) {
-            return message("The door is locked from the outside!");
-          } else if (state.flippedLight) {
-            return message("Ugh. Please turn off the lights first.");
-          } else {
-            return scene2();
-          }
-        });
-        $scene.find('.doorswitch').on('click', function() {
-          if (state.flippedLight) {
-            message("You hear a *click*.");
-            state.yourDoorLocked = !state.yourDoorLocked;
-            if (state.yourDoorLocked) {
-              return $(this).removeClass('on');
-            } else {
-              return $(this).addClass('on');
-            }
-          } else {
-            return message("The switch won't budge! It must depend on another switch...");
-          }
-        });
-        return $scene.find('.lightswitch').on('click', function() {
-          var $switch;
-          $switch = $(this);
-          if (state.flippedLight) {
-            message("You turn off the lights.\n\nYou hear a second *click*.");
-            state.flippedLight = false;
-            return $scene.find('.yourroom').removeClass('bright');
-          } else if (!(state.flippedLight != null)) {
-            message("You inspect the crack. It's been here as long as you remember, and it still looks ominous. Sometimes, you even think it looks like an egg about to wake from a long sleep. But you won't let your bro's \"revelations\" get to you.");
-            return $document.one('messageend', function() {
-              var $choices;
-              $choices = $scene.find('.choices');
-              $choices.removeClass('hidden');
-              $scene.on('click', '.ok', function() {
-                $choices.remove();
-                return turnOnLights();
-              });
-              return $scene.on('click', '.no', function() {
-                return $choices.addClass('hidden');
-              });
-            });
-          } else {
-            return turnOnLights();
-          }
-        });
+        return beginPlaying();
       });
+    });
+  };
+
+  beginPlaying = function() {
+    var $scene;
+    $scene = show('scene1');
+    $scene.off('click');
+    $scene.find('.doorswitch').removeClass('hidden');
+    $scene.find('.lightswitch').removeClass('hidden');
+    $scene.find('.door').removeClass('hidden');
+    $scene.on('click', '.door', function() {
+      if (state.yourDoorLocked) {
+        return message("The door is locked from the outside!");
+      } else if (state.flippedLight) {
+        return message("Ugh. Please turn off the lights first.");
+      } else {
+        $scene.off('click');
+        return scene2();
+      }
+    });
+    $scene.on('click', '.doorswitch', function() {
+      if (state.flippedLight) {
+        message("You hear a *click*.");
+        state.yourDoorLocked = !state.yourDoorLocked;
+        if (state.yourDoorLocked) {
+          return $(this).removeClass('on');
+        } else {
+          return $(this).addClass('on');
+        }
+      } else {
+        return message("The switch won't budge! It must depend on another switch...");
+      }
+    });
+    return $scene.on('click', '.lightswitch', function() {
+      var $switch;
+      $switch = $(this);
+      if (state.flippedLight) {
+        message("You turn off the lights.\n\nYou hear a second *click*.");
+        state.flippedLight = false;
+        return $scene.find('.yourroom').removeClass('bright');
+      } else if (!(state.flippedLight != null)) {
+        message("You inspect the crack. It's been here as long as you remember, and it still looks ominous. Sometimes, you even think it looks like an egg about to wake from a long sleep. But you won't let your bro's \"revelations\" get to you.");
+        return $document.one('messageend', function() {
+          var $choices;
+          $choices = $scene.find('.choices');
+          $choices.removeClass('hidden');
+          $scene.on('click.choices', '.ok', function() {
+            $choices.remove();
+            turnOnLights();
+            return $scene.off('click.choices');
+          });
+          return $scene.on('click.choices', '.no', function() {
+            $choices.addClass('hidden');
+            return $scene.off('click.choices');
+          });
+        });
+      } else {
+        return turnOnLights();
+      }
     });
   };
 
@@ -238,9 +261,42 @@
   };
 
   scene2 = function() {
-    return message("Navigate!");
+    var $scene;
+    $scene = show('scene2');
+    if (!state.visitedCorridor) {
+      state.visitedCorridor = true;
+      message("Your bro's room is on the left, your mom's room is on the right, and the main room is dead ahead.\n\nWhere do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.");
+    }
+    $scene.off('click');
+    return $scene.on('click', '.south', function() {
+      hide('scene2');
+      return beginPlaying();
+    });
   };
 
-  $(play1);
+  $(function() {
+    preloadImage('images/corridor.gif');
+    preloadImage('images/earth.gif');
+    preloadImage('images/ggcomp.gif');
+    preloadImage('images/gghouse.gif');
+    preloadImage('images/llim.gif');
+    preloadImage('images/meteor.gif');
+    preloadImage('images/scene1.gif');
+    preloadImage('images/stars.gif');
+    preloadImage('images/switchdown.gif');
+    preloadImage('images/switchup.gif');
+    preloadImage('images/tentacles.gif');
+    preloadImage('images/you.gif');
+    preloadImage('images/tinyworld.gif');
+    preloadImage('images/yourroom.gif');
+    preloadImage('images/yourroombright.gif');
+    preloadImage('images/buttons/south.gif');
+    preloadImage('images/buttons/north.gif');
+    preloadImage('images/buttons/east.gif');
+    preloadImage('images/buttons/west.gif');
+    return preloadImage('images/buttons/continue.gif');
+  });
+
+  game = scene2;
 
 }).call(this);

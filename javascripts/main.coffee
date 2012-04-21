@@ -2,6 +2,16 @@ $document = $(document)
 $message = $("#message")
 $content = $("#content")
 
+toLoad = 0
+preloadImage = (path) ->
+  toLoad++
+  image = new Image()
+  $(image).load ->
+    toLoad -= 1
+    if toLoad == 0
+      game()
+  image.src = path
+
 state =
   yourDoorLocked: true
 
@@ -186,56 +196,64 @@ play2 = ->
     But first, why don't you turn on the lights?
     """
     $document.one 'messageend', ->
-      $scene.find('.doorswitch').removeClass('hidden')
-      $scene.find('.lightswitch').removeClass('hidden')
-      $scene.find('.door').removeClass('hidden')
-      $scene.find('.door').on 'click', ->
-        if state.yourDoorLocked
-          message """
-          The door is locked from the outside!
-          """
-        else if state.flippedLight
-          message """
-          Ugh. Please turn off the lights first.
-          """
-        else
-          scene2()
-      $scene.find('.doorswitch').on 'click', ->
-        if state.flippedLight
-          message """
-          You hear a *click*.
-          """
-          state.yourDoorLocked = !state.yourDoorLocked
-          if state.yourDoorLocked then $(this).removeClass('on')
-          else                         $(this).addClass('on')
-        else
-          message """
-          The switch won't budge! It must depend on another switch...
-          """
-      $scene.find('.lightswitch').on 'click', ->
-        $switch = $(this)
-        if state.flippedLight
-          message """
-          You turn off the lights.
+      beginPlaying()
 
-          You hear a second *click*.
-          """
-          state.flippedLight = false
-          $scene.find('.yourroom').removeClass('bright')
-        else if !state.flippedLight?
-          message """
-          You inspect the crack. It's been here as long as you remember, and it still looks ominous. Sometimes, you even think it looks like an egg about to wake from a long sleep. But you won't let your bro's "revelations" get to you.
-          """
-          $document.one 'messageend', ->
-            $choices = $scene.find('.choices')
-            $choices.removeClass('hidden')
-            $scene.on 'click', '.ok', ->
-              $choices.remove()
-              turnOnLights()
-            $scene.on 'click', '.no', ->
-              $choices.addClass('hidden')
-        else
+beginPlaying = ->
+  $scene = show 'scene1'
+  $scene.off 'click'
+  $scene.find('.doorswitch').removeClass('hidden')
+  $scene.find('.lightswitch').removeClass('hidden')
+  $scene.find('.door').removeClass('hidden')
+  $scene.on 'click', '.door', ->
+    if state.yourDoorLocked
+      message """
+      The door is locked from the outside!
+      """
+    else if state.flippedLight
+      message """
+      Ugh. Please turn off the lights first.
+      """
+    else
+      $scene.off 'click'
+      scene2()
+  $scene.on 'click', '.doorswitch', ->
+    if state.flippedLight
+      message """
+      You hear a *click*.
+      """
+      state.yourDoorLocked = !state.yourDoorLocked
+      if state.yourDoorLocked then $(this).removeClass('on')
+      else                         $(this).addClass('on')
+    else
+      message """
+      The switch won't budge! It must depend on another switch...
+      """
+  $scene.on 'click', '.lightswitch', ->
+    $switch = $(this)
+    if state.flippedLight
+      message """
+      You turn off the lights.
+
+      You hear a second *click*.
+      """
+      state.flippedLight = false
+      $scene.find('.yourroom').removeClass('bright')
+    else if !state.flippedLight?
+      message """
+      You inspect the crack. It's been here as long as you remember, and it still looks ominous. Sometimes, you even think it looks like an egg about to wake from a long sleep. But you won't let your bro's "revelations" get to you.
+      """
+      $document.one 'messageend', ->
+        $choices = $scene.find('.choices')
+        $choices.removeClass('hidden')
+        $scene.on 'click.choices', '.ok', ->
+          $choices.remove()
           turnOnLights()
+          $scene.off 'click.choices'
+        $scene.on 'click.choices', '.no', ->
+          $choices.addClass('hidden')
+          $scene.off 'click.choices'
+    else
+      turnOnLights()
 
 turnOnLights = ->
   message """
@@ -250,9 +268,41 @@ turnOnLights = ->
 
 # Scene 2
 scene2 = ->
-  message """
-  Navigate!
-  """
+  $scene = show 'scene2'
+  if !state.visitedCorridor
+    state.visitedCorridor = true
+    message """
+    Your bro's room is on the left, your mom's room is on the right, and the main room is dead ahead.
 
-# Game start
-$ play1
+    Where do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.
+    """
+  $scene.off 'click'
+  $scene.on 'click', '.south', ->
+    hide 'scene2'
+    beginPlaying()
+
+# preload images
+$ ->
+  preloadImage 'images/corridor.gif'
+  preloadImage 'images/earth.gif'
+  preloadImage 'images/ggcomp.gif'
+  preloadImage 'images/gghouse.gif'
+  preloadImage 'images/llim.gif'
+  preloadImage 'images/meteor.gif'
+  preloadImage 'images/scene1.gif'
+  preloadImage 'images/stars.gif'
+  preloadImage 'images/switchdown.gif'
+  preloadImage 'images/switchup.gif'
+  preloadImage 'images/tentacles.gif'
+  preloadImage 'images/you.gif'
+  preloadImage 'images/tinyworld.gif'
+  preloadImage 'images/yourroom.gif'
+  preloadImage 'images/yourroombright.gif'
+  preloadImage 'images/buttons/south.gif'
+  preloadImage 'images/buttons/north.gif'
+  preloadImage 'images/buttons/east.gif'
+  preloadImage 'images/buttons/west.gif'
+  preloadImage 'images/buttons/continue.gif'
+
+# game is the first function called after load
+game = scene2

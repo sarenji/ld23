@@ -14,6 +14,12 @@ body {
   font-smooth: never;
   width: 640px;
   margin: 0 auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 h1 {
   font-size: 32px;
@@ -277,6 +283,54 @@ a:hover {
   top: 7px;
   width: 85px;
   height: 236px;
+}
+#scene2 .corridor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/corridor.gif");
+}
+#scene2 .north {
+  top: 161px;
+  left: 265px;
+}
+#scene2 .south {
+  top: 357px;
+  left: 258px;
+}
+#scene2 .west {
+  top: 228px;
+  left: 152px;
+}
+#scene2 .east {
+  top: 228px;
+  left: 357px;
+}
+.north {
+  position: absolute;
+  background: url("../images/buttons/north.gif") no-repeat;
+  width: 45px;
+  height: 78px;
+}
+.east {
+  position: absolute;
+  background: url("../images/buttons/east.gif") no-repeat;
+  width: 69px;
+  height: 79px;
+}
+.west {
+  position: absolute;
+  background: url("../images/buttons/west.gif") no-repeat;
+  width: 69px;
+  height: 79px;
+}
+.south {
+  position: absolute;
+  background: url("../images/buttons/south.gif") no-repeat;
+  width: 71px;
+  height: 89px;
 }
 @-moz-keyframes bounce {
   0% {
