@@ -1,20 +1,40 @@
 (function() {
-  var $message, message, show;
+  var $document, $message, find, hideMessage, message, scene1, scene2, show;
+
+  $document = $(document);
 
   $message = $("#message");
 
   show = function(id) {
-    return $("#" + id).removeClass('hidden');
+    return find(id).removeClass('hidden');
+  };
+
+  find = function(id) {
+    return $("#" + id);
   };
 
   message = function(msg, cont) {
-    if (cont == null) cont = false;
+    if (cont == null) cont = "";
     $message.removeClass('hidden');
-    $message.html(msg);
-    if (cont) {
-      return $message.append("<div id=\"continue\">\n  " + cont + " <img src=\"./images/buttons/continue.gif\" alt=\"continue\"/>\n</div>");
+    $message.empty().html(msg.replace(/\n/g, '<br>'));
+    $message.append("<div id=\"continue\">\n  " + cont + "\n  <img src=\"./images/buttons/continue.gif\" alt=\"continue\"/>\n</div>");
+    $message.scrollTop(0);
+    return message.up = true;
+  };
+
+  hideMessage = function() {
+    if (message.up) {
+      $("#message").addClass('hidden');
+      message.up = false;
+      return $document.trigger('messageend');
     }
   };
+
+  hideMessage();
+
+  $(document).keyup(function(e) {
+    if (message.up && e.which === 13 || e.which === 90) return hideMessage();
+  });
 
   $(function() {
     var $nameInsert, enteredName;
@@ -38,9 +58,39 @@
       $nameInsert.find('.first').remove();
       return $nameInsert.find('.second').show().on('click', '.ok', function() {
         $nameInsert.remove();
-        return show('scene1');
+        show('scene1');
+        return setTimeout(scene1, 0);
       });
     };
+  });
+
+  scene1 = function() {
+    var $scene;
+    $scene = find('scene1');
+    message("* LL began instant-messaging you!\nLL: Hello, Steve.\nLL: I just had another revelation.\nGQ: hahaha dude\nGQ: are you serious\nGQ: you have these like every other day\nGQ: every day*\nGQ: ok sorry what is it go on", "LL is typing...");
+    return $document.one('messageend', function() {
+      $scene.find('.gghouse').removeClass('hidden');
+      message("LL: I think we're in a game.\nGQ: O_O\nLL: Let me talk.\nLL: So, I've been wondering.\nLL: Our lives really aren't that different from a video game character.\nLL: We level up, we have arbitrary stat attributes, and all that.\nLL: We even have NPCs.", "LL is typing...");
+      return $document.one('messageend', function() {
+        message("LL: And our world is called Ludum.\nLL: I don't know, it seems painfully obvious to me now.\nLL: So I did some more sleuthing.\nLL: By which I mean I entered some calculations.", "LL is typing...");
+        return $document.one('messageend', function() {
+          $scene.find('.stars').removeClass('hidden');
+          message("LL: And apparently the world isn't so large.\nLL: But then I remembered that by any measurement of the observable universe, our world is tiny.", "LL is typing...");
+          return $document.one('messageend', function() {
+            message("LL: And then I started wondering...\nLL: What lies beyond?", "GQ is typing...");
+            return $document.one('messageend', function() {
+              return message("GQ: uh\nGQ: pretty melodramatic there bro!!\nLL: Okay, well, I guess it's not surprising that you'd act this way.\nLL: Man, it really sucks not having any other friends than you.");
+            });
+          });
+        });
+      });
+    });
+  };
+
+  scene2 = function() {};
+
+  $(function() {
+    return scene1();
   });
 
 }).call(this);

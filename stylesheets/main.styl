@@ -1,3 +1,10 @@
+stretch(top = 0, left = 0, right = 0, bottom = 0)
+  position absolute
+  top top
+  left left
+  right right
+  bottom bottom
+
 animate(name, duration, timing = linear, iteration = infinite)
   -webkit-animation-name: name
   -moz-animation-name: name
@@ -47,25 +54,20 @@ h1 {
 }
 
 #message {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  background: white;
-  border: 3px solid #eee;
+  stretch(top: auto)
+  color #fff
+  background rgba(0, 0, 0, .7)
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
   height: 100px;
-  color: #333;
   padding: 14px;
+  overflow-y: auto;
 }
 
 
 #continue {
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
+  float right
   color: #aaa;
   font-size: 8px;
 }
@@ -159,8 +161,33 @@ a:hover {
 .earth
   animate: bounce, 2s, ease
   position absolute
-  top 50%
+  top 35%
   left 50%
   width 32px
   height 32px
   background url(../images/earth.gif)
+
+.ggcomp
+  background: url(../images/scene1.gif)
+  stretch()
+
+.gghouse
+  background: url(../images/gghouse.gif)
+  stretch()
+
+::-webkit-scrollbar {
+    width: 12px;
+    background #aaa
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    background white
+    box-shadow 0 0 3px black
+}
