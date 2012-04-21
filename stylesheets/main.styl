@@ -141,6 +141,26 @@ a:hover {
   }
 }
 
-.stars
-  animate: fromtop, 10s
+@keyframes bounce
+  0%
+    margin-top 0px
+  25%
+    margin-top 2px
+  50%
+    margin-top 4px
+  75%
+    margin-top 2px
+  100%
+    margin-top 0px
 
+.stars
+  animate: fromtop, 20s, linear
+
+.earth
+  animate: bounce, 2s, ease
+  position absolute
+  top 50%
+  left 50%
+  width 32px
+  height 32px
+  background url(../images/earth.gif)
