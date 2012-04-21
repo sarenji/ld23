@@ -168,6 +168,12 @@ a:hover {
   background: #fff;
   box-shadow: 0 0 3px #000;
 }
+.ll {
+  color: #3f5567;
+}
+.gq {
+  color: #d45555;
+}
 @-moz-keyframes bounce {
   0% {
     margin-top: 0px;

@@ -9,8 +9,17 @@ find = (id) ->
 
 # MESSAGES
 
+colorize = (message) ->
+  messages = message.split('\n')
+  for msg, i in messages
+    msg = msg.replace(/^(LL: .*)/, '<span class="ll">$1</span>')
+    msg = msg.replace(/^(GQ: .*)/, '<span class="gq">$1</span>')
+    messages[i] = msg
+  messages.join '\n'
+
 message = (msg, cont = "") ->
   $message.removeClass('hidden')
+  msg = colorize(msg)
   $message.empty().html(msg.replace(/\n/g, '<br>'))
   $message.append("""
   <div id="continue">

@@ -1,5 +1,5 @@
 (function() {
-  var $document, $message, find, hideMessage, message, scene1, scene2, show;
+  var $document, $message, colorize, find, hideMessage, message, scene1, scene2, show;
 
   $document = $(document);
 
@@ -13,9 +13,22 @@
     return $("#" + id);
   };
 
+  colorize = function(message) {
+    var i, messages, msg, _len;
+    messages = message.split('\n');
+    for (i = 0, _len = messages.length; i < _len; i++) {
+      msg = messages[i];
+      msg = msg.replace(/^(LL: .*)/, '<span class="ll">$1</span>');
+      msg = msg.replace(/^(GQ: .*)/, '<span class="gq">$1</span>');
+      messages[i] = msg;
+    }
+    return messages.join('\n');
+  };
+
   message = function(msg, cont) {
     if (cont == null) cont = "";
     $message.removeClass('hidden');
+    msg = colorize(msg);
     $message.empty().html(msg.replace(/\n/g, '<br>'));
     $message.append("<div id=\"continue\">\n  " + cont + "\n  <img src=\"./images/buttons/continue.gif\" alt=\"continue\"/>\n</div>");
     $message.scrollTop(0);
