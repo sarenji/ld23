@@ -97,6 +97,7 @@ scene1 = ->
           message """
           LL: And then I started wondering...
           LL: What lies beyond?
+          LL: What lies sleeping?
           """, "GQ is typing..."
           $document.one 'messageend', ->
             message """

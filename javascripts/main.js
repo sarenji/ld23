@@ -77,7 +77,7 @@
           $scene.find('.stars').removeClass('hidden');
           message("LL: And apparently the world isn't so large.\nLL: But then I remembered that by any measurement of the observable universe, our world is tiny.", "LL is typing...");
           return $document.one('messageend', function() {
-            message("LL: And then I started wondering...\nLL: What lies beyond?", "GQ is typing...");
+            message("LL: And then I started wondering...\nLL: What lies beyond?\nLL: What lies sleeping?", "GQ is typing...");
             return $document.one('messageend', function() {
               return message("GQ: uh\nGQ: pretty melodramatic there bro!!\nLL: Okay, well, I guess it's not surprising that you'd act this way.\nLL: Man, it really sucks not having any other friends than you.");
             });

@@ -26,22 +26,17 @@ h1 {
 }
 #message {
   position: absolute;
-  top: auto;
+  top: 100%;
   left: 0;
   right: 0;
-  bottom: 0;
-  color: #fff;
-  background: rgba(0,0,0,0.70);
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  height: 100px;
+  bottom: auto;
+  color: #333;
+  background: #ddd;
   padding: 14px;
-  overflow-y: auto;
 }
 #continue {
   float: right;
-  color: #aaa;
+  color: #888;
   font-size: 8px;
 }
 p {
