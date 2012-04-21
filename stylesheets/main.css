@@ -78,7 +78,7 @@ p {
   color: #333;
   border: none;
 }
-#nameinsert {
+.choices {
   text-align: center;
   margin-top: 100px;
   background: rgba(0,0,0,0.50);
@@ -88,18 +88,18 @@ p {
   right: 0;
   bottom: 0;
 }
-#nameinsert p {
+.choices p {
   text-shadow: 2px 2px 0 #333;
 }
 a {
   padding: 10px;
   box-shadow: 2px 2px 0 #666;
-  background: #f2d666;
+  background: #ec9c12;
   color: #333;
   text-shadow: none;
 }
 a:hover {
-  background: #ec9c12;
+  background: #f2d666;
   cursor: pointer;
 }
 /*a:active {
@@ -141,9 +141,9 @@ a:hover {
   -webkit-animation-name: fromtop;
   -moz-animation-name: fromtop;
   animation-name: fromtop;
-  -webkit-animation-duration: 20s;
-  -moz-animation-duration: 20s;
-  animation-duration: 20s;
+  -webkit-animation-duration: 40s;
+  -moz-animation-duration: 40s;
+  animation-duration: 40s;
   -webkit-animation-timing-function: linear;
   -moz-animation-timing-function: linear;
   animation-timing-function: linear;
@@ -155,9 +155,9 @@ a:hover {
   -webkit-animation-name: bounce;
   -moz-animation-name: bounce;
   animation-name: bounce;
-  -webkit-animation-duration: 2s;
-  -moz-animation-duration: 2s;
-  animation-duration: 2s;
+  -webkit-animation-duration: 4s;
+  -moz-animation-duration: 4s;
+  animation-duration: 4s;
   -webkit-animation-timing-function: ease;
   -moz-animation-timing-function: ease;
   animation-timing-function: ease;
@@ -239,8 +239,44 @@ a:hover {
   bottom: 0;
   background: url("../images/yourroom.gif");
 }
+.yourroom.bright {
+  background-image: url("../images/yourroombright.gif");
+}
+.faux_link {
+  cursor: pointer;
+}
+#scene1 .yourbroim {
+  position: absolute;
+  top: 200px;
+  left: 440px;
+  width: 66px;
+  height: 75px;
+  background: url("../images/llim.gif") no-repeat top left;
+}
 #scene1 .lightswitch {
-  color: #fff;
+  position: absolute;
+  top: 0;
+  left: 357px;
+  width: 203px;
+  height: 141px;
+}
+#scene1 .doorswitch {
+  position: absolute;
+  top: 71px;
+  left: 126px;
+  width: 21px;
+  height: 42px;
+  background: url("../images/switchdown.gif");
+}
+#scene1 .doorswitch.on {
+  background-image: url("../images/switchup.gif");
+}
+#scene1 .door {
+  position: absolute;
+  left: 37px;
+  top: 7px;
+  width: 85px;
+  height: 236px;
 }
 @-moz-keyframes bounce {
   0% {
@@ -248,15 +284,15 @@ a:hover {
   }
 
   25% {
-    margin-top: 2px;
-  }
-
-  50% {
     margin-top: 4px;
   }
 
+  50% {
+    margin-top: 8px;
+  }
+
   75% {
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   100% {
@@ -269,15 +305,15 @@ a:hover {
   }
 
   25% {
-    margin-top: 2px;
-  }
-
-  50% {
     margin-top: 4px;
   }
 
+  50% {
+    margin-top: 8px;
+  }
+
   75% {
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   100% {
@@ -290,15 +326,15 @@ a:hover {
   }
 
   25% {
-    margin-top: 2px;
-  }
-
-  50% {
     margin-top: 4px;
   }
 
+  50% {
+    margin-top: 8px;
+  }
+
   75% {
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   100% {
@@ -311,15 +347,15 @@ a:hover {
   }
 
   25% {
-    margin-top: 2px;
-  }
-
-  50% {
     margin-top: 4px;
   }
 
+  50% {
+    margin-top: 8px;
+  }
+
   75% {
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   100% {
@@ -332,15 +368,15 @@ a:hover {
   }
 
   25% {
-    margin-top: 2px;
-  }
-
-  50% {
     margin-top: 4px;
   }
 
+  50% {
+    margin-top: 8px;
+  }
+
   75% {
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   100% {

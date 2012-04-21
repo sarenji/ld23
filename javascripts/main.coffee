@@ -8,6 +8,9 @@ state =
 show = (id) ->
   find(id).removeClass('hidden')
 
+hide = (id) ->
+  find(id).addClass('hidden')
+
 find = (id) ->
   $("##{id}")
 
@@ -184,6 +187,8 @@ play2 = ->
     You can't remember the exact sequences to the switches, because she changes them every night. Your mother somehow manages to change them without you noticing. And sometimes, some switches depend on another switch being pressed.
 
     You have no idea how she keeps track of all these switches in her head. It would be impressive if it wasn't SO INFURIATING.
+
+    But first, why don't you turn on the lights?
     """
     $document.one 'messageend', ->
       $scene.find('.doorswitch').removeClass('hidden')
@@ -192,7 +197,11 @@ play2 = ->
       $scene.find('.door').on 'click', ->
         if state.yourDoorLocked
           message """
-          The door is locked!
+          The door is locked from the outside!
+          """
+        else if state.flippedLight
+          message """
+          Ugh. Please turn off the lights first.
           """
         else
           scene2()
@@ -201,27 +210,47 @@ play2 = ->
           message """
           You hear a *click*.
           """
-          state.yourDoorLocked = false
+          state.yourDoorLocked = !state.yourDoorLocked
+          if state.yourDoorLocked then $(this).removeClass('on')
+          else                         $(this).addClass('on')
         else
           message """
           The switch won't budge! It must depend on another switch...
           """
       $scene.find('.lightswitch').on 'click', ->
+        $switch = $(this)
         if state.flippedLight
           message """
           You turn off the lights.
 
-          You also hear a *click*.
+          You hear a second *click*.
           """
           state.flippedLight = false
-        else
+          $scene.find('.yourroom').removeClass('bright')
+        else if !state.flippedLight?
           message """
-          You turn on the lights. You also resist a light pun.
-
-          You also hear a *click*.
+          You inspect the crack. It's been here as long as you remember, and it still looks ominous. Sometimes, you even think it looks like an egg about to wake from a long sleep. But you won't let your bro's "revelations" get to you.
           """
-          state.flippedLight = true
+          $document.one 'messageend', ->
+            $choices = $scene.find('.choices')
+            $choices.removeClass('hidden')
+            $scene.on 'click', '.ok', ->
+              $choices.remove()
+              turnOnLights()
+            $scene.on 'click', '.no', ->
+              $choices.addClass('hidden')
+        else
+          turnOnLights()
 
+turnOnLights = ->
+  message """
+  You turn on the lights.
+
+  You hear a second *click*.
+  """
+  state.flippedLight = true
+  $scene = find('scene1')
+  $scene.find('.yourroom').addClass('bright')
 
 
 # Scene 2

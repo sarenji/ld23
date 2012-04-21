@@ -100,27 +100,27 @@ p {
   border: none;
 }
 
-#nameinsert {
+.choices {
   text-align: center;
   margin-top: 100px
   background rgba(0, 0, 0, .5)
   stretch(top: auto)
 }
 
-#nameinsert p {
+.choices p {
   text-shadow: 2px 2px 0 #333;
 }
 
 a {
   padding: 10px;
   box-shadow: 2px 2px 0 #666;
-  background: #f2d666;
+  background: #ec9c12;
   color: #333;
   text-shadow: none;
 }
 
 a:hover {
-  background: #ec9c12;
+  background: #f2d666;
   cursor: pointer;
 }
 
@@ -158,19 +158,19 @@ a:hover {
   0%
     margin-top 0px
   25%
-    margin-top 2px
-  50%
     margin-top 4px
+  50%
+    margin-top 8px
   75%
-    margin-top 2px
+    margin-top 4px
   100%
     margin-top 0px
 
 .stars
-  animate: fromtop, 20s, linear
+  animate: fromtop, 40s, linear
 
 .earth
-  animate: bounce, 2s, ease
+  animate: bounce, 4s, ease
   position absolute
   top 35%
   left 50%
@@ -224,7 +224,39 @@ a:hover {
 .yourroom
   stretch()
   background url(../images/yourroom.gif)
+  &.bright
+    background-image url(../images/yourroombright.gif)
+
+.faux_link
+  cursor pointer
 
 #scene1
+  .yourbroim
+    position absolute
+    top 200px
+    left 440px
+    width 66px
+    height 75px
+    background url(../images/llim.gif) no-repeat top left
   .lightswitch
-    color white
+    position absolute
+    top 0
+    left 357px
+    width 203px
+    height 141px
+  .doorswitch
+    position absolute
+    top 71px
+    left 126px
+    width 21px
+    height 42px
+    background url(../images/switchdown.gif)
+    &.on
+      background-image url(../images/switchup.gif)
+
+  .door
+    position absolute
+    left 37px
+    top 7px
+    width 85px
+    height 236px

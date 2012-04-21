@@ -12,7 +12,7 @@
       <div id="copynpaste" class="hidden">
       </div>
       <div id="play1" class="hidden">
-        <div id="nameinsert" class="hidden">
+        <div id="nameinsert" class="hidden choices">
           <div class="first">
             <p class="pt20">What's your name?</p>
             <input id="newname" value="Googlohurf Hoodchuck"/>
@@ -29,10 +29,17 @@
       </div>
       <div id="scene1" class="hidden">
         <div class="game yourroom">
-          <span style="position: absolute; background: #eee; top: 10px; left: 10px; width: 20px; height: 20px;" class="yourbroim hidden"></span>
-          <span style="position: absolute; background: #ccc; top: 20px; left: 100px; width: 50px; height: 100px;" class="door hidden"></span>
-          <span style="position: absolute; background: #eee; top: 60px; left: 10px; width: 20px; height: 20px;" class="doorswitch hidden"></span>
-          <span style="position: absolute; background: #eee; top: 100px; left: 10px; width: 20px; height: 20px;" class="lightswitch hidden"></span>
+          <span class="yourbroim hidden faux_link"></span>
+          <span class="door hidden faux_link"></span>
+          <span class="doorswitch faux_link"></span>
+          <span class="lightswitch hidden faux_link"></span>
+          <div class="choices hidden">
+            <p class="pt20">Wait, what? You don't remember a switch<br>being in here. Press it?</p>
+            <p class="vt20 pb20 buttons">
+              <a class="ok">yes</a>
+              <a class="no">no</a>
+            </p>
+          </div>
         </div>
         <div class="ggcomp hidden"></div>
         <div class="gghouse hidden"></div>

@@ -1,5 +1,5 @@
 (function() {
-  var $content, $document, $message, colorize, control, debug, enterName, find, hideMessage, introYourRoom, message, play1, play2, scene1, scene2, show, state,
+  var $content, $document, $message, colorize, control, debug, enterName, find, hide, hideMessage, introYourRoom, message, play1, play2, scene1, scene2, show, state, turnOnLights,
     __slice = Array.prototype.slice;
 
   $document = $(document);
@@ -14,6 +14,10 @@
 
   show = function(id) {
     return find(id).removeClass('hidden');
+  };
+
+  hide = function(id) {
+    return find(id).addClass('hidden');
   };
 
   find = function(id) {
@@ -176,14 +180,16 @@
     $scene.find('.tentacles').remove();
     message("Getting around this house is impossible! You know it'll take you way longer than two minutes. But you have to try. Your brother might be annoying slash amusing slash cute with his \"revelations,\" but he always makes cool stuff.");
     return $document.one('messageend', function() {
-      message("Your mother is extremely private, so she installed switches everywhere to deter anyone from stealing her things (or her kids). She is especially protective of your little brother and never lets him unlock his own door.\n\nYou can't remember the exact sequences to the switches, because she changes them every night. Your mother somehow manages to change them without you noticing. And sometimes, some switches depend on another switch being pressed.\n\nYou have no idea how she keeps track of all these switches in her head. It would be impressive if it wasn't SO INFURIATING.");
+      message("Your mother is extremely private, so she installed switches everywhere to deter anyone from stealing her things (or her kids). She is especially protective of your little brother and never lets him unlock his own door.\n\nYou can't remember the exact sequences to the switches, because she changes them every night. Your mother somehow manages to change them without you noticing. And sometimes, some switches depend on another switch being pressed.\n\nYou have no idea how she keeps track of all these switches in her head. It would be impressive if it wasn't SO INFURIATING.\n\nBut first, why don't you turn on the lights?");
       return $document.one('messageend', function() {
         $scene.find('.doorswitch').removeClass('hidden');
         $scene.find('.lightswitch').removeClass('hidden');
         $scene.find('.door').removeClass('hidden');
         $scene.find('.door').on('click', function() {
           if (state.yourDoorLocked) {
-            return message("The door is locked!");
+            return message("The door is locked from the outside!");
+          } else if (state.flippedLight) {
+            return message("Ugh. Please turn off the lights first.");
           } else {
             return scene2();
           }
@@ -191,22 +197,51 @@
         $scene.find('.doorswitch').on('click', function() {
           if (state.flippedLight) {
             message("You hear a *click*.");
-            return state.yourDoorLocked = false;
+            state.yourDoorLocked = !state.yourDoorLocked;
+            if (state.yourDoorLocked) {
+              return $(this).removeClass('on');
+            } else {
+              return $(this).addClass('on');
+            }
           } else {
             return message("The switch won't budge! It must depend on another switch...");
           }
         });
         return $scene.find('.lightswitch').on('click', function() {
+          var $switch;
+          $switch = $(this);
           if (state.flippedLight) {
-            message("You turn off the lights.\n\nYou also hear a *click*.");
-            return state.flippedLight = false;
+            message("You turn off the lights.\n\nYou hear a second *click*.");
+            state.flippedLight = false;
+            return $scene.find('.yourroom').removeClass('bright');
+          } else if (!(state.flippedLight != null)) {
+            message("You inspect the crack. It's been here as long as you remember, and it still looks ominous. Sometimes, you even think it looks like an egg about to wake from a long sleep. But you won't let your bro's \"revelations\" get to you.");
+            return $document.one('messageend', function() {
+              var $choices;
+              $choices = $scene.find('.choices');
+              $choices.removeClass('hidden');
+              $scene.on('click', '.ok', function() {
+                $choices.remove();
+                return turnOnLights();
+              });
+              return $scene.on('click', '.no', function() {
+                return $choices.addClass('hidden');
+              });
+            });
           } else {
-            message("You turn on the lights. You also resist a light pun.\n\nYou also hear a *click*.");
-            return state.flippedLight = true;
+            return turnOnLights();
           }
         });
       });
     });
+  };
+
+  turnOnLights = function() {
+    var $scene;
+    message("You turn on the lights.\n\nYou hear a second *click*.");
+    state.flippedLight = true;
+    $scene = find('scene1');
+    return $scene.find('.yourroom').addClass('bright');
   };
 
   scene2 = function() {
