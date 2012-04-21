@@ -19,7 +19,8 @@ show = (id) ->
   find(id).removeClass('hidden')
 
 hide = (id) ->
-  find(id).addClass('hidden')
+  find(id).addClass('hidden').off 'click'
+
 
 find = (id) ->
   $("##{id}")
@@ -280,6 +281,28 @@ scene2 = ->
   $scene.on 'click', '.south', ->
     hide 'scene2'
     beginPlaying()
+  $scene.on 'click', '.east', ->
+    message """
+    You, uh... would really rather not. Your mother loves her games.
+    """
+  $scene.on 'click', '.west', ->
+    message """
+    Your bro's door is locked! You need to flip a switch somewhere...
+
+    Really, how does your mother stay so consistent with her games?
+    """
+  $scene.on 'click', '.north', ->
+    # NAVIGATE!
+
+kitchen = ->
+  $scene = show 'kitchen'
+  if !state.visitedKitchen
+    state.visitedKitchen = true
+    message """
+    Your bro's room is on the left, your mom's room is on the right, and the main room is dead ahead.
+
+    Where do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.
+    """
 
 # preload images
 $ ->
@@ -305,4 +328,4 @@ $ ->
   preloadImage 'images/buttons/continue.gif'
 
 # game is the first function called after load
-game = scene2
+game = play1

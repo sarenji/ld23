@@ -1,5 +1,5 @@
 (function() {
-  var $content, $document, $message, beginPlaying, colorize, control, debug, enterName, find, game, hide, hideMessage, introYourRoom, message, play1, play2, preloadImage, scene1, scene2, show, state, toLoad, turnOnLights,
+  var $content, $document, $message, beginPlaying, colorize, control, debug, enterName, find, game, hide, hideMessage, introYourRoom, kitchen, message, play1, play2, preloadImage, scene1, scene2, show, state, toLoad, turnOnLights,
     __slice = Array.prototype.slice;
 
   $document = $(document);
@@ -30,7 +30,7 @@
   };
 
   hide = function(id) {
-    return find(id).addClass('hidden');
+    return find(id).addClass('hidden').off('click');
   };
 
   find = function(id) {
@@ -268,10 +268,26 @@
       message("Your bro's room is on the left, your mom's room is on the right, and the main room is dead ahead.\n\nWhere do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.");
     }
     $scene.off('click');
-    return $scene.on('click', '.south', function() {
+    $scene.on('click', '.south', function() {
       hide('scene2');
       return beginPlaying();
     });
+    $scene.on('click', '.east', function() {
+      return message("You, uh... would really rather not. Your mother loves her games.");
+    });
+    $scene.on('click', '.west', function() {
+      return message("Your bro's door is locked! You need to flip a switch somewhere...\n\nReally, how does your mother stay so consistent with her games?");
+    });
+    return $scene.on('click', '.north', function() {});
+  };
+
+  kitchen = function() {
+    var $scene;
+    $scene = show('kitchen');
+    if (!state.visitedKitchen) {
+      state.visitedKitchen = true;
+      return message("Your bro's room is on the left, your mom's room is on the right, and the main room is dead ahead.\n\nWhere do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.");
+    }
   };
 
   $(function() {
@@ -297,6 +313,6 @@
     return preloadImage('images/buttons/continue.gif');
   });
 
-  game = scene2;
+  game = play1;
 
 }).call(this);
