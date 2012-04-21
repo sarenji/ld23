@@ -7,12 +7,12 @@
     if (cont == null) cont = false;
     $message.html(msg);
     if (cont) {
-      return $message.append("<div id=\"continue\">\n  " + cont + " is typing... <img src=\"./images/buttons/continue.gif\" alt=\"continue\"/>\n</div>");
+      return $message.append("<div id=\"continue\">\n  " + cont + " <img src=\"./images/buttons/continue.gif\" alt=\"continue\"/>\n</div>");
     }
   };
 
   $(function() {
-    return message("hello world!", "GG");
+    return message("hello world!", "GG is typing...");
   });
 
 }).call(this);
