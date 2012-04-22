@@ -206,7 +206,7 @@ scene1 = ->
               LL: Be in my room in two minutes.
               * LL signed off.
               GQ: wait what
-              * LL is no longer online!
+              * LL is offline and did not receive your message!
               """
               $document.one 'messageend', play2
 
