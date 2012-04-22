@@ -124,7 +124,7 @@ scene1 = ->
   LL: Hello, Steve.
   LL: I just had another revelation.
   GQ: hahaha dude
-  GQ: are you serious
+  GQ: i knew it
   GQ: you have these like every other day
   GQ: every day*
   GQ: ok sorry what is it go on
@@ -142,6 +142,7 @@ scene1 = ->
     LL: We even have NPCs.
     """, "LL is typing..."
     $document.one 'messageend', ->
+      $scene.find('.tinyworld').removeClass('hidden')
       message """
       LL: And our world is called Ludum.
       LL: I don't know, it seems painfully obvious to me now.
@@ -155,27 +156,32 @@ scene1 = ->
         LL: But then I remembered that by any measurement of the observable universe, our world is tiny.
         """, "LL is typing..."
         $document.one 'messageend', ->
-          $scene.find('.tentacles').removeClass('hidden')
+          $scene.find('.monster').removeClass('hidden')
           message """
           LL: And then I started wondering...
           LL: What lies beyond?
           LL: What lies sleeping?
-          """, "GQ is typing..."
+          """, "LL is typing..."
           $document.one 'messageend', ->
-            $scene.find('.ggcomp').appendTo $scene
+            $scene.find('.monsterworld').removeClass('hidden')
             message """
-            GQ: uh
-            GQ: pretty melodramatic there bro!!
-            LL: Okay, well, I guess it's not surprising that you'd act this way.
-            LL: But, speaking as your younger brother by blood, you should really quit it.
-            LL: And this isn't one of those times where the very next day I realize you were absolutely correct.
-            LL: Anyway, I have to go fix my dimensional warper. It should be done very soon.
-            LL: Be in my room in two minutes.
-            * LL signed off.
-            GQ: wait what
-            * LL is no longer online!
-            """
-            $document.one 'messageend', play2
+            LL: We are so small.
+            """, "GQ is typing..."
+            $document.one 'messageend', ->
+              $scene.find('.ggcomp').appendTo $scene
+              message """
+              GQ: uh
+              GQ: pretty melodramatic there bro!!
+              LL: Okay, well, I guess it's not surprising that you'd act this way.
+              LL: But, speaking as your younger brother by blood, you should really quit it.
+              LL: And this isn't one of those times where the very next day I realize you were absolutely correct.
+              LL: Anyway, I have to go fix my dimensional warper. It should be done very soon.
+              LL: Be in my room in two minutes.
+              * LL signed off.
+              GQ: wait what
+              * LL is no longer online!
+              """
+              $document.one 'messageend', play2
 
 play2 = ->
   $scene = show 'scene1'
@@ -183,6 +189,9 @@ play2 = ->
   $scene.find('.gghouse').remove()
   $scene.find('.stars').remove()
   $scene.find('.tentacles').remove()
+  $scene.find('.tinyworld').remove()
+  $scene.find('.monster').remove()
+  $scene.find('.monsterworld').remove()
   message """
   You and him both know it'll take you way longer than two minutes. Getting around this house is impossible! But you have to try. Your brother might be annoying slash amusing slash cute with his "revelations," but he always makes cool stuff.
   """
@@ -212,11 +221,11 @@ beginPlaying = ->
       """
     else if state.flippedLight
       message """
-      Ugh. Please turn off the lights first.
+      Bluhhh. Turn off the lights first.
       """
     else
       $scene.off 'click'
-      scene2()
+      corridor()
   $scene.on 'click', '.doorswitch', ->
     if state.flippedLight
       message """
@@ -267,13 +276,15 @@ turnOnLights = ->
   $scene.find('.yourroom').addClass('bright')
 
 
-# Scene 2
-scene2 = ->
+# Corridor
+corridor = ->
   $scene = show 'scene2'
   if !state.visitedCorridor
     state.visitedCorridor = true
     message """
-    Your bro's room is on the left, your mom's room is on the right, and the main room is dead ahead.
+    This is the only hallway in your house.
+
+    Your bro's room is to the west, your mom's room is to the east, and the main room is dead ahead.
 
     Where do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.
     """
@@ -287,22 +298,28 @@ scene2 = ->
     """
   $scene.on 'click', '.west', ->
     message """
-    Your bro's door is locked! You need to flip a switch somewhere...
+    Your bro's door is locked! You need to flip a switch somewhere.
 
-    Really, how does your mother stay so consistent with her games?
+    How does your mother stay so consistent with her games?
     """
   $scene.on 'click', '.north', ->
-    # NAVIGATE!
+    hide 'scene2'
+    kitchen()
 
 kitchen = ->
   $scene = show 'kitchen'
   if !state.visitedKitchen
     state.visitedKitchen = true
     message """
-    Your bro's room is on the left, your mom's room is on the right, and the main room is dead ahead.
-
-    Where do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.
+    This is your main room, which is also the kitchen. Your mom doesn't seem to be here, which is good. But then, she doesn't seem to be around a lot of the time.
     """
+  $scene.on 'click', '.east', ->
+    hide 'kitchen'
+  $scene.on 'click', '.west', ->
+    hide 'kitchen'
+  $scene.on 'click', '.south', ->
+    hide 'kitchen'
+    corridor()
 
 # preload images
 $ ->

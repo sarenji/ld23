@@ -174,7 +174,7 @@ a:hover {
   top: 35%;
   left: 50%;
   width: 32px;
-  height: 32px;
+  height: 36px;
   background: url("../images/earth.gif");
 }
 .ggcomp {
@@ -187,6 +187,14 @@ a:hover {
 }
 .gghouse {
   background: url("../images/gghouse.gif");
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.tinyworld {
+  background: url("../images/tinyworld.gif");
   position: absolute;
   top: 0;
   left: 0;
@@ -228,6 +236,22 @@ a:hover {
   right: 0;
   bottom: 0;
   background: url("../images/tentacles.gif");
+}
+.monster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/monster.gif");
+}
+.monsterworld {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/monsterworld.gif");
 }
 #play1 {
   position: absolute;
@@ -331,6 +355,26 @@ a:hover {
   background: url("../images/buttons/south.gif") no-repeat;
   width: 71px;
   height: 89px;
+}
+#kitchen {
+  background: url("../images/kitchen.gif");
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+#kitchen .south {
+  top: 357px;
+  left: 258px;
+}
+#kitchen .west {
+  left: 21px;
+  top: 277px;
+}
+#kitchen .east {
+  left: 524px;
+  top: 62px;
 }
 @-moz-keyframes bounce {
   0% {

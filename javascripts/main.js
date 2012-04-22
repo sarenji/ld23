@@ -1,5 +1,5 @@
 (function() {
-  var $content, $document, $message, beginPlaying, colorize, control, debug, enterName, find, game, hide, hideMessage, introYourRoom, kitchen, message, play1, play2, preloadImage, scene1, scene2, show, state, toLoad, turnOnLights,
+  var $content, $document, $message, beginPlaying, colorize, control, corridor, debug, enterName, find, game, hide, hideMessage, introYourRoom, kitchen, message, play1, play2, preloadImage, scene1, show, state, toLoad, turnOnLights,
     __slice = Array.prototype.slice;
 
   $document = $(document);
@@ -154,22 +154,27 @@
     var $scene;
     $scene = show('scene1');
     $scene.find('.ggcomp').removeClass('hidden');
-    message("* LL began instant messaging you!\nLL: Hello, Steve.\nLL: I just had another revelation.\nGQ: hahaha dude\nGQ: are you serious\nGQ: you have these like every other day\nGQ: every day*\nGQ: ok sorry what is it go on", "LL is typing...");
+    message("* LL began instant messaging you!\nLL: Hello, Steve.\nLL: I just had another revelation.\nGQ: hahaha dude\nGQ: i knew it\nGQ: you have these like every other day\nGQ: every day*\nGQ: ok sorry what is it go on", "LL is typing...");
     return $document.one('messageend', function() {
       $scene.find('.gghouse').removeClass('hidden');
       message("LL: I think we're in a game.\nGQ: O_O\nLL: No, let me talk.\nLL: So, I've been wondering.\nLL: Our lives really aren't that different from a video game character.\nLL: We level up, we have arbitrary stat attributes, and all that.\nLL: We even have NPCs.", "LL is typing...");
       return $document.one('messageend', function() {
+        $scene.find('.tinyworld').removeClass('hidden');
         message("LL: And our world is called Ludum.\nLL: I don't know, it seems painfully obvious to me now.\nLL: So I did some more sleuthing.\nLL: By which I mean I entered some calculations.", "LL is typing...");
         return $document.one('messageend', function() {
           $scene.find('.stars').removeClass('hidden');
           message("LL: And apparently the world isn't so large.\nLL: But then I remembered that by any measurement of the observable universe, our world is tiny.", "LL is typing...");
           return $document.one('messageend', function() {
-            $scene.find('.tentacles').removeClass('hidden');
-            message("LL: And then I started wondering...\nLL: What lies beyond?\nLL: What lies sleeping?", "GQ is typing...");
+            $scene.find('.monster').removeClass('hidden');
+            message("LL: And then I started wondering...\nLL: What lies beyond?\nLL: What lies sleeping?", "LL is typing...");
             return $document.one('messageend', function() {
-              $scene.find('.ggcomp').appendTo($scene);
-              message("GQ: uh\nGQ: pretty melodramatic there bro!!\nLL: Okay, well, I guess it's not surprising that you'd act this way.\nLL: But, speaking as your younger brother by blood, you should really quit it.\nLL: And this isn't one of those times where the very next day I realize you were absolutely correct.\nLL: Anyway, I have to go fix my dimensional warper. It should be done very soon.\nLL: Be in my room in two minutes.\n* LL signed off.\nGQ: wait what\n* LL is no longer online!");
-              return $document.one('messageend', play2);
+              $scene.find('.monsterworld').removeClass('hidden');
+              message("LL: We are so small.", "GQ is typing...");
+              return $document.one('messageend', function() {
+                $scene.find('.ggcomp').appendTo($scene);
+                message("GQ: uh\nGQ: pretty melodramatic there bro!!\nLL: Okay, well, I guess it's not surprising that you'd act this way.\nLL: But, speaking as your younger brother by blood, you should really quit it.\nLL: And this isn't one of those times where the very next day I realize you were absolutely correct.\nLL: Anyway, I have to go fix my dimensional warper. It should be done very soon.\nLL: Be in my room in two minutes.\n* LL signed off.\nGQ: wait what\n* LL is no longer online!");
+                return $document.one('messageend', play2);
+              });
             });
           });
         });
@@ -184,6 +189,9 @@
     $scene.find('.gghouse').remove();
     $scene.find('.stars').remove();
     $scene.find('.tentacles').remove();
+    $scene.find('.tinyworld').remove();
+    $scene.find('.monster').remove();
+    $scene.find('.monsterworld').remove();
     message("You and him both know it'll take you way longer than two minutes. Getting around this house is impossible! But you have to try. Your brother might be annoying slash amusing slash cute with his \"revelations,\" but he always makes cool stuff.");
     return $document.one('messageend', function() {
       message("Your mother is extremely private, so she installed switches everywhere to deter anyone from stealing her things (or her kids). She is especially protective of your little brother and never lets him unlock his own door.\n\nYou can't remember the exact sequences to the switches, because she changes them every night, somehow without you noticing. And some switches depend on another switch being pressed.\n\nYou have no idea how she keeps track of all these switches in her head. It would be so impressive if it wasn't SO INFURIATING.\n\nBut first, why don't you turn on the lights?");
@@ -204,10 +212,10 @@
       if (state.yourDoorLocked) {
         return message("The door is locked from the outside!");
       } else if (state.flippedLight) {
-        return message("Ugh. Please turn off the lights first.");
+        return message("Bluhhh. Turn off the lights first.");
       } else {
         $scene.off('click');
-        return scene2();
+        return corridor();
       }
     });
     $scene.on('click', '.doorswitch', function() {
@@ -260,12 +268,12 @@
     return $scene.find('.yourroom').addClass('bright');
   };
 
-  scene2 = function() {
+  corridor = function() {
     var $scene;
     $scene = show('scene2');
     if (!state.visitedCorridor) {
       state.visitedCorridor = true;
-      message("Your bro's room is on the left, your mom's room is on the right, and the main room is dead ahead.\n\nWhere do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.");
+      message("This is the only hallway in your house.\n\nYour bro's room is to the west, your mom's room is to the east, and the main room is dead ahead.\n\nWhere do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.");
     }
     $scene.off('click');
     $scene.on('click', '.south', function() {
@@ -276,9 +284,12 @@
       return message("You, uh... would really rather not. Your mother loves her games.");
     });
     $scene.on('click', '.west', function() {
-      return message("Your bro's door is locked! You need to flip a switch somewhere...\n\nReally, how does your mother stay so consistent with her games?");
+      return message("Your bro's door is locked! You need to flip a switch somewhere.\n\nHow does your mother stay so consistent with her games?");
     });
-    return $scene.on('click', '.north', function() {});
+    return $scene.on('click', '.north', function() {
+      hide('scene2');
+      return kitchen();
+    });
   };
 
   kitchen = function() {
@@ -286,8 +297,18 @@
     $scene = show('kitchen');
     if (!state.visitedKitchen) {
       state.visitedKitchen = true;
-      return message("Your bro's room is on the left, your mom's room is on the right, and the main room is dead ahead.\n\nWhere do you go? Pleasenotyourmom'sroom pleasenotyourmom'sroom.");
+      message("This is your main room, which is also the kitchen. Your mom doesn't seem to be here, which is good. But then, she doesn't seem to be around a lot of the time.");
     }
+    $scene.on('click', '.east', function() {
+      return hide('kitchen');
+    });
+    $scene.on('click', '.west', function() {
+      return hide('kitchen');
+    });
+    return $scene.on('click', '.south', function() {
+      hide('kitchen');
+      return corridor();
+    });
   };
 
   $(function() {
