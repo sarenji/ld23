@@ -152,6 +152,18 @@
   introYourRoom = function() {
     var $scene;
     $scene = show('scene1');
+    $scene.on('click', '.doorswitch', function() {
+      return message("This switch could be for the light. But your mom rewires the entire house every day, so it's just a guess.");
+    });
+    $scene.on('click', '.you', function() {
+      return message("You wish you had a mirror right now.");
+    });
+    $scene.on('click', '.door', function() {
+      return message("The door is locked from the outside!");
+    });
+    $scene.on('click', '.comp', function() {
+      return message("Your internet handle is Godelius Quantide, or GQ, named after the first constellation you found with the TELESCOPE.\n\nNo one is online for you to instant message. You can always check later on your PHONE, which is in one of your pockets.");
+    });
     message("This is your room. It's a bit dark right now, even if it means getting around is a little harder.");
     return $document.one('messageend', function() {
       $scene.find('.yourbroim').removeClass('hidden');
@@ -159,6 +171,7 @@
       return $document.one('messageend', function() {
         return $scene.find('.yourbroim').on('click', function() {
           $scene.find('.yourbroim').remove();
+          hide('scene1');
           return scene1();
         });
       });
@@ -223,6 +236,12 @@
     $scene.find('.doorswitch').removeClass('hidden');
     $scene.find('.lightswitch').removeClass('hidden');
     $scene.find('.door').removeClass('hidden');
+    $scene.on('click', '.comp', function() {
+      return message("Your internet handle is Godelius Quantide, or GQ, named after the first constellation you found with the TELESCOPE.\n\nNo one is online for you to instant message. You can always check later on your PHONE, which is in one of your pockets.");
+    });
+    $scene.on('click', '.you', function() {
+      return message("You are so unbearably cute! Tee hee!");
+    });
     $scene.on('click', '.door', function() {
       if (state.yourDoorLocked) {
         return message("The door is locked from the outside!");
