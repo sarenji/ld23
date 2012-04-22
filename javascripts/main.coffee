@@ -176,7 +176,7 @@ scene1 = ->
               GQ: pretty melodramatic there bro!!
               LL: Okay, well, I guess it's not surprising that you'd act this way.
               LL: But, speaking as your younger brother by blood, you should really quit it.
-              LL: And this isn't one of those times where the very next day I realize you were absolutely correct.
+              LL: And this isn't one of those times where the next day I realize you were absolutely correct.
               LL: Anyway, I have to go fix my dimensional warper. It should be done very soon.
               LL: Be in my room in two minutes.
               * LL signed off.
@@ -313,16 +313,77 @@ kitchen = ->
   if !state.visitedKitchen
     state.visitedKitchen = true
     message """
-    This is your main room, which is also the kitchen. Your mom doesn't seem to be here, which is good. But then, she doesn't seem to be around a lot of the time.
+    This is your main room, which is also the kitchen. Your mother doesn't seem to be here. She seems to be away more often.
     """
   $scene.on 'click', '.east', ->
     hide 'kitchen'
     doorOutside()
   $scene.on 'click', '.west', ->
     hide 'kitchen'
+    assembly()
   $scene.on 'click', '.south', ->
     hide 'kitchen'
     corridor()
+  $scene.on 'click', '.sink', ->
+    if state.kind == "stairs"
+      # TODO: Display "Put stairs here?" choice
+      # TODO: Show stairs
+      message """
+      You put the stairs in front of the sink.
+      """
+      state.sinkHasStairs = true
+      state.kind = null
+    else if state.sinkHasStairs
+      if state.kind?
+        message """
+        You may be insanely handsome, but you don't have the upper strength to carry two things.
+        """
+      else
+        # TODO: Display "Take stairs?" choice
+        # TODO: Show stairs
+        message """
+        You take the steppy-up-and-down-thing.
+        """
+        state.sinkHasStairs = false
+        state.kind = "stairs"
+    else
+      message """
+      This is where you wash your own dishes. You're not really sure where the water comes from.
+      """
+  $scene.on 'click', '.hammer', ->
+    swap.call(this, "hammer")
+  $scene.on 'click', '.gun', ->
+    swap.call(this, "gun")
+  $scene.on 'click', '.butcher', ->
+    swap.call(this, "butcher")
+  $scene.on 'click', '.u', ->
+    message """
+    You are TOO handsome! Hehehehe.
+    """
+
+swap = (kind) ->
+  if state.sinkHasStairs and state.kind == kind
+    message """You put back the #{kind} like a nice boy."""
+    state.kind = null
+    $(this).css 'opacity', 1
+  else if state.sinkHasStairs and ([null, "butcher", "gun", "hammer"].indexOf(state.kind) >= 0)
+    # TODO: Display "Switch with?" choice
+    state.kind = kind
+    find('kitchen').find('.butcher, .gun, .hammer').css 'opacity', 1
+    $(this).css 'opacity', .2
+    switch kind
+      when "hammer"
+        message "You take the hammer. Iiiiiiiiittt's not a dumb meme time."
+      when "gun"
+        message "You take the gun and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone."
+      when "butcher"
+        message "You used to help your mother with cooking, back when she was pregnant with your bro. Unfortunately you slipped and fell while holding the knife, and the sharp edge sliced your mother in the eye."
+  else if !state.sinkHasStairs
+    message """
+    You're too short to reach. You may be incredibly handsome, but you are still short.
+    """
+
+
 
 doorOutside = ->
   $scene = show 'dooroutside'
@@ -330,8 +391,6 @@ doorOutside = ->
     state.visitedDoorOutside = true
     message """
     Buuuhhh!!! You used to escape through this window (now cloaked behind a barricade of wooden planks). The window is the only un-switch-able escape hatch, and it seems your mother is intent on preventing you from ever using it again.
-
-    Maybe you should talk to your bro about this.
     """
   $scene.on 'click', '.south', ->
     hide 'dooroutside'
@@ -345,29 +404,110 @@ doorOutside = ->
     Locked. There's nothing interesting outside, anyway.
     """
 
+assembly = ->
+  $scene = show 'assembly'
+  if !state.visitedAssembly
+    state.visitedAssembly = true
+    message """
+    Welcome to objectively the worst room in the house. You don't doubt the existence of heaven, because there's got to be one to counteract the neverending drama that ensues only because this switch assembly line exists.
+
+    It's a bit depressing to see how many switches your mother is making with the explicit purpose of making your life a miserable hell.
+    """
+  $scene.on 'click', '.south', ->
+    hide 'assembly'
+    kitchen()
+  $scene.on 'click', '.switch', ->
+    switch state.kind
+      when "hammer"
+        message """
+        You slam the hammer as hard as possible on the switch. Nothing happens.
+        """
+      when "sickle"
+        message """
+        You try to pry the switch off the wall. The switch stays solidly against the wall.
+        """
+      when "gun"
+        message """
+        The gun chamber is empty. You stand there with your gun raised, looking dumb.
+        """
+      when "butcher"
+        message """
+        You hack at the switch. But it must be made out of bone because you just can't cut through to it.
+        """
+      when "stairs"
+        message """
+        What are you even trying to do with the stairs?
+        """
+      else
+        message """
+        This is the emergency switch your mother installed in case there ever was a time we needed her. Except you could never figure out how to press it. You needed to five years ago, but that's a story you'd rather not tell.
+        """
+
+  $scene.on 'click', '.onswitch', ->
+    message """
+    It's already off. Besides, why would you ever want to flip this???
+    """
+  $scene.on 'click', '.stairs', ->
+    if state.tookStairs
+      if state.kind == "stairs"
+        message """
+        You put back the stairs.
+        """
+        $scene.find('.putbackstairs').removeClass('hidden')
+        $(this).css('opacity', 1)
+        state.tookStairs = false
+        state.kind = null
+      else if state.kind?
+        message """
+        A #{state.kind} is not stairs.
+        """
+      else
+        message """
+        You have no stairs to put back. Although your bro can be a little walkover sometimes...
+        """
+    else
+      if state.kind
+        message """
+        You are already carrying something! Come on, get with the physics here.
+        """
+      else
+        message """
+        You take the stairs. They're hollow inside like your mother's heart, and dark like hers too.
+        """
+        state.tookStairs = true
+        state.kind = "stairs"
+        $(this).css('opacity', .2)
+
 
 # game is the first function called after load
 game = corridor
 
 # preload images (do after game declaration)
 $ ->
+  preloadImage 'images/assembly.gif'
   preloadImage 'images/corridor.gif'
+  preloadImage 'images/dooroutside.gif'
   preloadImage 'images/earth.gif'
   preloadImage 'images/ggcomp.gif'
   preloadImage 'images/gghouse.gif'
+  preloadImage 'images/kitchen.gif'
   preloadImage 'images/llim.gif'
   preloadImage 'images/meteor.gif'
+  preloadImage 'images/monster.gif'
+  preloadImage 'images/monsterworld.gif'
   preloadImage 'images/scene1.gif'
   preloadImage 'images/stars.gif'
+  preloadImage 'images/stairs.gif'
   preloadImage 'images/switchdown.gif'
   preloadImage 'images/switchup.gif'
   preloadImage 'images/tentacles.gif'
-  preloadImage 'images/you.gif'
   preloadImage 'images/tinyworld.gif'
+  preloadImage 'images/tinyworldwhole.gif'
+  preloadImage 'images/you.gif'
   preloadImage 'images/yourroom.gif'
   preloadImage 'images/yourroombright.gif'
+  preloadImage 'images/buttons/continue.gif'
   preloadImage 'images/buttons/south.gif'
   preloadImage 'images/buttons/north.gif'
   preloadImage 'images/buttons/east.gif'
   preloadImage 'images/buttons/west.gif'
-  preloadImage 'images/buttons/continue.gif'

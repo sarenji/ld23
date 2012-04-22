@@ -1,5 +1,5 @@
 (function() {
-  var $content, $document, $message, beginPlaying, colorize, control, corridor, debug, doorOutside, enterName, find, game, hide, hideMessage, introYourRoom, kitchen, message, play1, play2, preloadImage, scene1, show, state, toLoad, turnOnLights,
+  var $content, $document, $message, assembly, beginPlaying, colorize, control, corridor, debug, doorOutside, enterName, find, game, hide, hideMessage, introYourRoom, kitchen, message, play1, play2, preloadImage, scene1, show, state, swap, toLoad, turnOnLights,
     __slice = Array.prototype.slice;
 
   $document = $(document);
@@ -172,7 +172,7 @@
               message("LL: We are so small.", "GQ is typing...");
               return $document.one('messageend', function() {
                 $scene.find('.ggcomp').appendTo($scene);
-                message("GQ: uh\nGQ: pretty melodramatic there bro!!\nLL: Okay, well, I guess it's not surprising that you'd act this way.\nLL: But, speaking as your younger brother by blood, you should really quit it.\nLL: And this isn't one of those times where the very next day I realize you were absolutely correct.\nLL: Anyway, I have to go fix my dimensional warper. It should be done very soon.\nLL: Be in my room in two minutes.\n* LL signed off.\nGQ: wait what\n* LL is no longer online!");
+                message("GQ: uh\nGQ: pretty melodramatic there bro!!\nLL: Okay, well, I guess it's not surprising that you'd act this way.\nLL: But, speaking as your younger brother by blood, you should really quit it.\nLL: And this isn't one of those times where the next day I realize you were absolutely correct.\nLL: Anyway, I have to go fix my dimensional warper. It should be done very soon.\nLL: Be in my room in two minutes.\n* LL signed off.\nGQ: wait what\n* LL is no longer online!");
                 return $document.one('messageend', play2);
               });
             });
@@ -297,19 +297,71 @@
     $scene = show('kitchen');
     if (!state.visitedKitchen) {
       state.visitedKitchen = true;
-      message("This is your main room, which is also the kitchen. Your mom doesn't seem to be here, which is good. But then, she doesn't seem to be around a lot of the time.");
+      message("This is your main room, which is also the kitchen. Your mother doesn't seem to be here. She seems to be away more often.");
     }
     $scene.on('click', '.east', function() {
       hide('kitchen');
       return doorOutside();
     });
     $scene.on('click', '.west', function() {
-      return hide('kitchen');
+      hide('kitchen');
+      return assembly();
     });
-    return $scene.on('click', '.south', function() {
+    $scene.on('click', '.south', function() {
       hide('kitchen');
       return corridor();
     });
+    $scene.on('click', '.sink', function() {
+      if (state.kind === "stairs") {
+        message("You put the stairs in front of the sink.");
+        state.sinkHasStairs = true;
+        return state.kind = null;
+      } else if (state.sinkHasStairs) {
+        if (state.kind != null) {
+          return message("You may be insanely handsome, but you don't have the upper strength to carry two things.");
+        } else {
+          message("You take the steppy-up-and-down-thing.");
+          state.sinkHasStairs = false;
+          return state.kind = "stairs";
+        }
+      } else {
+        return message("This is where you wash your own dishes. You're not really sure where the water comes from.");
+      }
+    });
+    $scene.on('click', '.hammer', function() {
+      return swap.call(this, "hammer");
+    });
+    $scene.on('click', '.gun', function() {
+      return swap.call(this, "gun");
+    });
+    $scene.on('click', '.butcher', function() {
+      return swap.call(this, "butcher");
+    });
+    return $scene.on('click', '.u', function() {
+      return message("You are TOO handsome! Hehehehe.");
+    });
+  };
+
+  swap = function(kind) {
+    if (state.sinkHasStairs && state.kind === kind) {
+      message("You put back the " + kind + " like a nice boy.");
+      state.kind = null;
+      return $(this).css('opacity', 1);
+    } else if (state.sinkHasStairs && ([null, "butcher", "gun", "hammer"].indexOf(state.kind) >= 0)) {
+      state.kind = kind;
+      find('kitchen').find('.butcher, .gun, .hammer').css('opacity', 1);
+      $(this).css('opacity', .2);
+      switch (kind) {
+        case "hammer":
+          return message("You take the hammer. Iiiiiiiiittt's not a dumb meme time.");
+        case "gun":
+          return message("You take the gun and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone.");
+        case "butcher":
+          return message("You used to help your mother with cooking, back when she was pregnant with your bro. Unfortunately you slipped and fell while holding the knife, and the sharp edge sliced your mother in the eye.");
+      }
+    } else if (!state.sinkHasStairs) {
+      return message("You're too short to reach. You may be incredibly handsome, but you are still short.");
+    }
   };
 
   doorOutside = function() {
@@ -317,7 +369,7 @@
     $scene = show('dooroutside');
     if (!state.visitedDoorOutside) {
       state.visitedDoorOutside = true;
-      message("Buuuhhh!!! You used to escape through this window (now cloaked behind a barricade of wooden planks). The window is the only un-switch-able escape hatch, and it seems your mother is intent on preventing you from ever using it again.\n\nMaybe you should talk to your bro about this.");
+      message("Buuuhhh!!! You used to escape through this window (now cloaked behind a barricade of wooden planks). The window is the only un-switch-able escape hatch, and it seems your mother is intent on preventing you from ever using it again.");
     }
     $scene.on('click', '.south', function() {
       hide('dooroutside');
@@ -331,29 +383,92 @@
     });
   };
 
+  assembly = function() {
+    var $scene;
+    $scene = show('assembly');
+    if (!state.visitedAssembly) {
+      state.visitedAssembly = true;
+      message("Welcome to objectively the worst room in the house. You don't doubt the existence of heaven, because there's got to be one to counteract the neverending drama that ensues only because this switch assembly line exists.\n\nIt's a bit depressing to see how many switches your mother is making with the explicit purpose of making your life a miserable hell.");
+    }
+    $scene.on('click', '.south', function() {
+      hide('assembly');
+      return kitchen();
+    });
+    $scene.on('click', '.switch', function() {
+      switch (state.kind) {
+        case "hammer":
+          return message("You slam the hammer as hard as possible on the switch. Nothing happens.");
+        case "sickle":
+          return message("You try to pry the switch off the wall. The switch stays solidly against the wall.");
+        case "gun":
+          return message("The gun chamber is empty. You stand there with your gun raised, looking dumb.");
+        case "butcher":
+          return message("You hack at the switch. But it must be made out of bone because you just can't cut through to it.");
+        case "stairs":
+          return message("What are you even trying to do with the stairs?");
+        default:
+          return message("This is the emergency switch your mother installed in case there ever was a time we needed her. Except you could never figure out how to press it. You needed to five years ago, but that's a story you'd rather not tell.");
+      }
+    });
+    $scene.on('click', '.onswitch', function() {
+      return message("It's already off. Besides, why would you ever want to flip this???");
+    });
+    return $scene.on('click', '.stairs', function() {
+      if (state.tookStairs) {
+        if (state.kind === "stairs") {
+          message("You put back the stairs.");
+          $scene.find('.putbackstairs').removeClass('hidden');
+          $(this).css('opacity', 1);
+          state.tookStairs = false;
+          return state.kind = null;
+        } else if (state.kind != null) {
+          return message("A " + state.kind + " is not stairs.");
+        } else {
+          return message("You have no stairs to put back. Although your bro can be a little walkover sometimes...");
+        }
+      } else {
+        if (state.kind) {
+          return message("You are already carrying something! Come on, get with the physics here.");
+        } else {
+          message("You take the stairs. They're hollow inside like your mother's heart, and dark like hers too.");
+          state.tookStairs = true;
+          state.kind = "stairs";
+          return $(this).css('opacity', .2);
+        }
+      }
+    });
+  };
+
   game = corridor;
 
   $(function() {
+    preloadImage('images/assembly.gif');
     preloadImage('images/corridor.gif');
+    preloadImage('images/dooroutside.gif');
     preloadImage('images/earth.gif');
     preloadImage('images/ggcomp.gif');
     preloadImage('images/gghouse.gif');
+    preloadImage('images/kitchen.gif');
     preloadImage('images/llim.gif');
     preloadImage('images/meteor.gif');
+    preloadImage('images/monster.gif');
+    preloadImage('images/monsterworld.gif');
     preloadImage('images/scene1.gif');
     preloadImage('images/stars.gif');
+    preloadImage('images/stairs.gif');
     preloadImage('images/switchdown.gif');
     preloadImage('images/switchup.gif');
     preloadImage('images/tentacles.gif');
-    preloadImage('images/you.gif');
     preloadImage('images/tinyworld.gif');
+    preloadImage('images/tinyworldwhole.gif');
+    preloadImage('images/you.gif');
     preloadImage('images/yourroom.gif');
     preloadImage('images/yourroombright.gif');
+    preloadImage('images/buttons/continue.gif');
     preloadImage('images/buttons/south.gif');
     preloadImage('images/buttons/north.gif');
     preloadImage('images/buttons/east.gif');
-    preloadImage('images/buttons/west.gif');
-    return preloadImage('images/buttons/continue.gif');
+    return preloadImage('images/buttons/west.gif');
   });
 
 }).call(this);

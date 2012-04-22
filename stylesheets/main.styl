@@ -196,10 +196,6 @@ a:hover {
   background: url(../images/tinyworld.gif)
   stretch()
 
-#dooroutside
-  background: url(../images/dooroutside.gif)
-  stretch()
-
 ::-webkit-scrollbar {
     width: 12px;
     background #aaa
@@ -238,6 +234,14 @@ a:hover {
 .monsterworld
   stretch()
   background url(../images/monsterworld.gif)
+
+.u
+  position absolute
+  width 95px
+  height 182px
+  top 0
+  left 0
+  background url(../images/u.gif) no-repeat
 
 #play1
   stretch()
@@ -325,6 +329,12 @@ a:hover {
   width 71px
   height 89px
 
+.stairs
+  position absolute
+  background url(../images/stairs.gif) no-repeat
+  width 101px
+  height 110px
+
 #kitchen
   background url(../images/kitchen.gif)
   stretch()
@@ -338,8 +348,41 @@ a:hover {
   .east
     left 524px
     top  62px
+  .u
+    left 340px
+    top  254px
+  .sink
+    position absolute
+    top 240px
+    left 0
+    width 313px
+    height 133px
+    background rgba(230, 230, 230, .5)
+  .butcher
+    position absolute
+    top 140px
+    left 40px
+    width 20px
+    height 40px
+    background rgba(230, 230, 230, .5)
+  .gun
+    position absolute
+    top 140px
+    left 70px
+    width 20px
+    height 40px
+    background rgba(230, 230, 230, .5)
+  .hammer
+    position absolute
+    top 140px
+    left 100px
+    width 20px
+    height 40px
+    background rgba(230, 230, 230, .5)
 
 #dooroutside
+  background: url(../images/dooroutside.gif)
+  stretch()
   .south
     top 357px
     left 258px
@@ -357,3 +400,34 @@ a:hover {
     width 230px
     top 30px
     background rgba(230, 230, 230, .5)
+
+#assembly
+  background url(../images/assembly.gif)
+  stretch()
+  .south
+    top 357px
+    left 258px
+  .switch
+    position absolute
+    top 284px
+    left 53px
+    width 30px
+    height 30px
+    background rgba(230, 230, 230, .5)
+  .offswitch
+    position absolute
+    top 20px
+    left 30px
+    width 100px
+    height 80px
+    background rgba(230, 230, 230, .5)
+  .onswitch
+    position absolute
+    top 126px
+    left 30px
+    width 100px
+    height 80px
+    background rgba(230, 230, 230, .5)
+  .stairs
+    left 98px
+    top  309px
