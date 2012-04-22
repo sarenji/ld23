@@ -280,9 +280,9 @@ a:hover {
     left 126px
     width 21px
     height 42px
-    background url(../images/switchdown.gif)
+    background url(../images/buttons/switchdown.gif)
     &.on
-      background-image url(../images/switchup.gif)
+      background-image url(../images/buttons/switchup.gif)
 
   .door
     position absolute
@@ -411,27 +411,22 @@ a:hover {
   .south
     top 357px
     left 258px
-  .switch
+  .momswitch
     position absolute
     top 284px
     left 53px
     width 30px
     height 30px
     background rgba(230, 230, 230, .5)
-  .offswitch
+  .assemblyswitch
     position absolute
-    top 20px
-    left 30px
-    width 100px
-    height 80px
-    background rgba(230, 230, 230, .5)
-  .onswitch
-    position absolute
-    top 126px
-    left 30px
-    width 100px
-    height 80px
-    background rgba(230, 230, 230, .5)
+    top 166px
+    left 60px
+    width 21px
+    height 42px
+    background url(../images/buttons/switchdown.gif)
+    &.on
+      background url(../images/buttons/switchup.gif)
   .stairs
     left 98px
     top  309px
@@ -465,3 +460,38 @@ a:hover {
     height 91px
     right 66px
     top 192px
+
+#outsidefakesun
+  stretch()
+  background url(../images/undersideday.gif)
+  .sky
+    stretch(top: auto)
+    height 220px
+    width inherit
+  .north
+    right 45px
+    top 35px
+  .you
+    position absolute
+    width 48px
+    height 91px
+    right 66px
+    top 192px
+  .generator
+    position absolute
+    bottom 0
+    left 170px
+    width 260px
+    height 220px
+  .switch
+    position absolute
+    bottom 180px
+    left 390px
+    height 21px
+    width 42px
+    background url(../images/buttons/switchoff90deg.gif)
+    &.on
+      background-image url(../images/buttons/switchon90deg.gif)
+  .switchdetail
+    background url(../images/switchdetail.gif)
+    stretch()

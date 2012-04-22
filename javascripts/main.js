@@ -1,5 +1,5 @@
 (function() {
-  var $content, $document, $message, assembly, beginPlaying, colorize, control, corridor, debug, doorOutside, enterName, find, game, goOutside, hide, hideMessage, introYourRoom, kitchen, message, outsideNight, play1, play2, preloadImage, scene1, show, state, swap, toLoad, turnOnLights,
+  var $content, $document, $message, assembly, beginPlaying, colorize, control, corridor, debug, doorOutside, enterName, find, game, goOutside, hide, hideMessage, introYourRoom, kitchen, message, outsideFakeSun, outsideNight, play1, play2, preloadImage, scene1, show, state, swap, toLoad, turnOnLights,
     __slice = Array.prototype.slice;
 
   $document = $(document);
@@ -411,24 +411,28 @@
       hide('assembly');
       return kitchen();
     });
-    $scene.on('click', '.switch', function() {
+    $scene.on('click', '.momswitch', function() {
       switch (state.kind) {
         case "hammer":
           return message("You slam the hammer as hard as possible on the switch. Nothing happens.");
         case "sickle":
           return message("You try to pry the switch off the wall. The switch stays solidly against the wall.");
         case "gun":
-          return message("The gun chamber is empty. You stand there with your gun raised, looking dumb.");
+          return message("The gun chamber is empty. You stand there with your gun raised, trying to look macho like Stallone.");
         case "butcher":
-          return message("You hack at the switch. But it must be made out of bone because you just can't cut through to it.");
-        case "stairs":
-          return message("What are you even trying to do with the stairs?");
+          return message("You hack at the switch. It wasn't very effective...");
         default:
           return message("This is the emergency switch your mother installed in case there ever was a time we needed her. Except you could never figure out how to press it. You needed to five years ago, but that's a story you'd rather not tell.");
       }
     });
-    $scene.on('click', '.onswitch', function() {
-      return message("It's already off. Besides, why would you ever want to flip this???");
+    $scene.on('click', '.assemblyswitch', function() {
+      var modifier;
+      if (state.kind === 'gun') {
+        return message("You flip the switch. There is a shuddering boom.\n\nSo young, and the gates of hell have already opened for you.");
+      } else {
+        modifier = (state.kind != null) && state.kind !== "stairs" ? " with your " + state.kind : "";
+        return message("You can't reach the switch" + modifier + "! Why would you ever want to flip the assembly line switch back on anyway???");
+      }
     });
     return $scene.on('click', '.stairs', function() {
       if (state.tookStairs) {
@@ -493,7 +497,40 @@
     });
   };
 
-  game = goOutside;
+  outsideFakeSun = function() {
+    var $scene;
+    $scene = show('outsidefakesun');
+    $scene.on('click', '.north', function() {
+      hide('outsidefakesun');
+      return goOutside();
+    });
+    $scene.on('click', '.sky', function() {
+      return message("The generator's artificial sun emits such a bright light that you can't see the stars.");
+    });
+    $scene.on('click', '.generator', function() {
+      return message("The generator. It's a monstrous monster of a machine that powers the switch assembly line. Oh man, you are totally going to hell for turning it on.");
+    });
+    return $scene.on('click', '.switch', function() {
+      $(this).toggleClass('on');
+      if (!state.sawDetailedSwitch) {
+        message("You flip the switch.\n\nWait. What's this poking out below the switch?\n\n...\n\nOkay, whoa. You've simply got to tell your bro about this.");
+        return $document.one('messageend', function() {
+          $scene.find('.switchdetail').removeClass('hidden');
+          message("* You began instant messaging LL!\nGQ: ok, wow\nGQ: can you believe this\nGQ: mom wired a switch through the fuckin planet out onto the other side\nGQ: this is mad dedication right here ok\nGQ: i think im forced to admit that this is some impressive shenanigans right here\nGQ: are you there\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: alskd;jklsda;jlkf\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: ffffffffffffff\n* LL is offline and did not receive your message!\n* You ceased instant messaging LL!");
+          state.outsideSwitchOn = true;
+          state.sawDetailedSwitch = true;
+          return $document.one('messageend', function() {
+            return $scene.find('.switchdetail').addClass('hidden');
+          });
+        });
+      } else {
+        message("You flip the switch.\n\nYou hear a second *click*.");
+        return state.outsideSwitchOn = !state.outsideSwitchOn;
+      }
+    });
+  };
+
+  game = outsideFakeSun;
 
   $(function() {
     preloadImage('images/assembly.gif');
@@ -510,11 +547,12 @@
     preloadImage('images/scene1.gif');
     preloadImage('images/stars.gif');
     preloadImage('images/stairs.gif');
-    preloadImage('images/switchdown.gif');
-    preloadImage('images/switchup.gif');
     preloadImage('images/tentacles.gif');
     preloadImage('images/tinyworld.gif');
     preloadImage('images/tinyworldwhole.gif');
+    preloadImage('images/u.gif');
+    preloadImage('images/underside.gif');
+    preloadImage('images/usmall.gif');
     preloadImage('images/you.gif');
     preloadImage('images/yourroom.gif');
     preloadImage('images/yourroombright.gif');
@@ -522,7 +560,11 @@
     preloadImage('images/buttons/south.gif');
     preloadImage('images/buttons/north.gif');
     preloadImage('images/buttons/east.gif');
-    return preloadImage('images/buttons/west.gif');
+    preloadImage('images/buttons/west.gif');
+    preloadImage('images/buttons/switchdown.gif');
+    preloadImage('images/buttons/switchup.gif');
+    preloadImage('images/buttons/switchon90deg.gif');
+    return preloadImage('images/buttons/switchoff90deg.gif');
   });
 
 }).call(this);

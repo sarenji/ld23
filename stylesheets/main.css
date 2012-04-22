@@ -309,10 +309,10 @@ a:hover {
   left: 126px;
   width: 21px;
   height: 42px;
-  background: url("../images/switchdown.gif");
+  background: url("../images/buttons/switchdown.gif");
 }
 #scene1 .doorswitch.on {
-  background-image: url("../images/switchup.gif");
+  background-image: url("../images/buttons/switchup.gif");
 }
 #scene1 .door {
   position: absolute;
@@ -471,7 +471,7 @@ a:hover {
   top: 357px;
   left: 258px;
 }
-#assembly .switch {
+#assembly .momswitch {
   position: absolute;
   top: 284px;
   left: 53px;
@@ -479,21 +479,16 @@ a:hover {
   height: 30px;
   background: rgba(230,230,230,0.50);
 }
-#assembly .offswitch {
+#assembly .assemblyswitch {
   position: absolute;
-  top: 20px;
-  left: 30px;
-  width: 100px;
-  height: 80px;
-  background: rgba(230,230,230,0.50);
+  top: 166px;
+  left: 60px;
+  width: 21px;
+  height: 42px;
+  background: url("../images/buttons/switchdown.gif");
 }
-#assembly .onswitch {
-  position: absolute;
-  top: 126px;
-  left: 30px;
-  width: 100px;
-  height: 80px;
-  background: rgba(230,230,230,0.50);
+#assembly .assemblyswitch.on {
+  background: url("../images/buttons/switchup.gif");
 }
 #assembly .stairs {
   left: 98px;
@@ -546,6 +541,60 @@ a:hover {
   height: 91px;
   right: 66px;
   top: 192px;
+}
+#outsidefakesun {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/undersideday.gif");
+}
+#outsidefakesun .sky {
+  position: absolute;
+  top: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 220px;
+  width: inherit;
+}
+#outsidefakesun .north {
+  right: 45px;
+  top: 35px;
+}
+#outsidefakesun .you {
+  position: absolute;
+  width: 48px;
+  height: 91px;
+  right: 66px;
+  top: 192px;
+}
+#outsidefakesun .generator {
+  position: absolute;
+  bottom: 0;
+  left: 170px;
+  width: 260px;
+  height: 220px;
+}
+#outsidefakesun .switch {
+  position: absolute;
+  bottom: 180px;
+  left: 390px;
+  height: 21px;
+  width: 42px;
+  background: url("../images/buttons/switchoff90deg.gif");
+}
+#outsidefakesun .switch.on {
+  background-image: url("../images/buttons/switchon90deg.gif");
+}
+#outsidefakesun .switchdetail {
+  background: url("../images/switchdetail.gif");
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 @-moz-keyframes bounce {
   0% {

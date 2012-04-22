@@ -16,6 +16,8 @@ preloadImage = (path) ->
 
 state =
   yourDoorLocked: true
+  # Fake.
+
 
 show = (id) ->
   find(id).removeClass('hidden')
@@ -432,7 +434,7 @@ assembly = ->
   $scene.on 'click', '.south', ->
     hide 'assembly'
     kitchen()
-  $scene.on 'click', '.switch', ->
+  $scene.on 'click', '.momswitch', ->
     switch state.kind
       when "hammer"
         message """
@@ -444,25 +446,30 @@ assembly = ->
         """
       when "gun"
         message """
-        The gun chamber is empty. You stand there with your gun raised, looking dumb.
+        The gun chamber is empty. You stand there with your gun raised, trying to look macho like Stallone.
         """
       when "butcher"
         message """
-        You hack at the switch. But it must be made out of bone because you just can't cut through to it.
-        """
-      when "stairs"
-        message """
-        What are you even trying to do with the stairs?
+        You hack at the switch. It wasn't very effective...
         """
       else
         message """
         This is the emergency switch your mother installed in case there ever was a time we needed her. Except you could never figure out how to press it. You needed to five years ago, but that's a story you'd rather not tell.
         """
 
-  $scene.on 'click', '.onswitch', ->
-    message """
-    It's already off. Besides, why would you ever want to flip this???
-    """
+  $scene.on 'click', '.assemblyswitch', ->
+    if state.kind == 'gun'
+      # TODO: Choice, with a really angry Karkat thing?
+      message """
+      You flip the switch. There is a shuddering boom.
+
+      So young, and the gates of hell have already opened for you.
+      """
+    else
+      modifier = if state.kind? and state.kind != "stairs" then " with your #{state.kind}" else ""
+      message """
+      You can't reach the switch#{modifier}! Why would you ever want to flip the assembly line switch back on anyway???
+      """
   $scene.on 'click', '.stairs', ->
     if state.tookStairs
       if state.kind == "stairs"
@@ -526,10 +533,65 @@ outsideNight = ->
   # TODO: Break into mom's room by firing the bullet found in your bro's room with the gun.
   # TODO: Use the butcher knife to... thing. Maybe it gets the bullets.
 
+outsideFakeSun = ->
+  $scene = show 'outsidefakesun'
+  $scene.on 'click', '.north', ->
+    hide 'outsidefakesun'
+    goOutside()
+  $scene.on 'click', '.sky', ->
+    message "The generator's artificial sun emits such a bright light that you can't see the stars."
+  $scene.on 'click', '.generator', ->
+    message "The generator. It's a monstrous monster of a machine that powers the switch assembly line. Oh man, you are totally going to hell for turning it on."
+  $scene.on 'click', '.switch', ->
+    $(this).toggleClass('on')
+    if !state.sawDetailedSwitch
+      message """
+      You flip the switch.
+
+      Wait. What's this poking out below the switch?
+
+      ...
+
+      Okay, whoa. You've simply got to tell your bro about this.
+      """
+      $document.one 'messageend', ->
+        $scene.find('.switchdetail').removeClass('hidden')
+        message """
+        * You began instant messaging LL!
+        GQ: ok, wow
+        GQ: can you believe this
+        GQ: mom wired a switch through the fuckin planet out onto the other side
+        GQ: this is mad dedication right here ok
+        GQ: i think im forced to admit that this is some impressive shenanigans right here
+        GQ: are you there
+        * LL is offline and did not receive your message!
+        * LL is offline and did not receive your message!
+        GQ: alskd;jklsda;jlkf
+        * LL is offline and did not receive your message!
+        * LL is offline and did not receive your message!
+        * LL is offline and did not receive your message!
+        * LL is offline and did not receive your message!
+        * LL is offline and did not receive your message!
+        GQ: ffffffffffffff
+        * LL is offline and did not receive your message!
+        * You ceased instant messaging LL!
+        """
+        state.outsideSwitchOn = true
+        state.sawDetailedSwitch = true
+        $document.one 'messageend', ->
+          $scene.find('.switchdetail').addClass('hidden')
+    else
+      message """
+      You flip the switch.
+
+      You hear a second *click*.
+      """
+      state.outsideSwitchOn = !state.outsideSwitchOn
+
 # Possible TODO: Add "choice" to bro's room to knock; if so, get a cool conversation :)
 
 # game is the first function called after load
-game = goOutside
+game = outsideFakeSun
 
 # preload images (do after game declaration)
 $ ->
@@ -547,11 +609,12 @@ $ ->
   preloadImage 'images/scene1.gif'
   preloadImage 'images/stars.gif'
   preloadImage 'images/stairs.gif'
-  preloadImage 'images/switchdown.gif'
-  preloadImage 'images/switchup.gif'
   preloadImage 'images/tentacles.gif'
   preloadImage 'images/tinyworld.gif'
   preloadImage 'images/tinyworldwhole.gif'
+  preloadImage 'images/u.gif'
+  preloadImage 'images/underside.gif'
+  preloadImage 'images/usmall.gif'
   preloadImage 'images/you.gif'
   preloadImage 'images/yourroom.gif'
   preloadImage 'images/yourroombright.gif'
@@ -560,3 +623,7 @@ $ ->
   preloadImage 'images/buttons/north.gif'
   preloadImage 'images/buttons/east.gif'
   preloadImage 'images/buttons/west.gif'
+  preloadImage 'images/buttons/switchdown.gif'
+  preloadImage 'images/buttons/switchup.gif'
+  preloadImage 'images/buttons/switchon90deg.gif'
+  preloadImage 'images/buttons/switchoff90deg.gif'
