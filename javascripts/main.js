@@ -786,7 +786,7 @@
     return $scene = show('showcredits');
   };
 
-  game = broRoom;
+  game = play1;
 
   $(function() {
     preloadImage('images/assembly.gif');
