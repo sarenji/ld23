@@ -1,5 +1,5 @@
 (function() {
-  var $content, $document, $message, assembly, beginPlaying, colorize, control, corridor, debug, doorOutside, enterName, find, game, hide, hideMessage, introYourRoom, kitchen, message, play1, play2, preloadImage, scene1, show, state, swap, toLoad, turnOnLights,
+  var $content, $document, $message, assembly, beginPlaying, colorize, control, corridor, debug, doorOutside, enterName, find, game, goOutside, hide, hideMessage, introYourRoom, kitchen, message, outsideNight, play1, play2, preloadImage, scene1, show, state, swap, toLoad, turnOnLights,
     __slice = Array.prototype.slice;
 
   $document = $(document);
@@ -376,7 +376,24 @@
       return kitchen();
     });
     $scene.on('click', '.planks', function() {
-      return message("You need to find something to unscrew these planks.");
+      if (state.priedPlanks) {
+        hide('dooroutside');
+        return goOutside();
+      } else if (!(state.kind != null)) {
+        return message("You need to find something to unscrew these planks.");
+      } else {
+        switch (state.kind) {
+          case "stairs":
+            return message("You slam the stairs against the planks. The stairs get a little bent.");
+          case "butcher":
+            return message("You attack the planks with the butcher knife and look like an idiot in doing so.");
+          case "gun":
+            return message("You shoot the planks. Or, you would have if the gun wasn't empty of bullets.");
+          case "hammer":
+            message("You pry the planks out of their foundation. Light filters through the now-open window!");
+            return state.priedPlanks = true;
+        }
+      }
     });
     return $scene.on('click', '.door', function() {
       return message("Locked. There's nothing interesting outside, anyway.");
@@ -439,7 +456,44 @@
     });
   };
 
-  game = corridor;
+  goOutside = function() {
+    var $scene;
+    $scene = show('outsideday');
+    $scene.on('click', '.west', function() {
+      hide('outsideday');
+      return doorOutside();
+    });
+    $scene.on('click', '.south', function() {
+      hide('outsideday');
+      return outsideNight();
+    });
+    $scene.on('click', '.u', function() {
+      return message("Rawr ;-)");
+    });
+    return $scene.on('click', '.sky', function() {
+      return message("It's too bright to see the stars. You really like stars. They make you feel so small, and yet, paradoxically, they make you feel like you can do anything.");
+    });
+  };
+
+  outsideNight = function() {
+    var $scene;
+    $scene = show('outsidenight');
+    $scene.on('click', '.north', function() {
+      hide('outsidenight');
+      return goOutside();
+    });
+    $scene.on('click', '.you', function() {
+      return message("You love this spot. You try to escape here once every few hours. There's just something so peaceful about the stars.");
+    });
+    $scene.on('click', '.generator', function() {
+      return message("It's too dark to see, but this is where the generator for the switch assembly line is.");
+    });
+    return $scene.on('click', '.stars', function() {
+      return message("You think you can make out Godelius Quantide and Leland L., the constellations you and your bro based your internet handles after.");
+    });
+  };
+
+  game = goOutside;
 
   $(function() {
     preloadImage('images/assembly.gif');

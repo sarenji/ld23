@@ -396,9 +396,25 @@ doorOutside = ->
     hide 'dooroutside'
     kitchen()
   $scene.on 'click', '.planks', ->
-    message """
-    You need to find something to unscrew these planks.
-    """
+    if state.priedPlanks
+      hide 'dooroutside'
+      goOutside()
+    else if !state.kind?
+      message """
+      You need to find something to unscrew these planks.
+      """
+    else
+      switch state.kind
+        when "stairs"
+          message "You slam the stairs against the planks. The stairs get a little bent."
+        when "butcher"
+          message "You attack the planks with the butcher knife and look like an idiot in doing so."
+        when "gun"
+          message "You shoot the planks. Or, you would have if the gun wasn't empty of bullets."
+        when "hammer"
+          message "You pry the planks out of their foundation. Light filters through the now-open window!"
+          # TODO: Remove planks/replace BG
+          state.priedPlanks = true
   $scene.on 'click', '.door', ->
     message """
     Locked. There's nothing interesting outside, anyway.
@@ -479,8 +495,41 @@ assembly = ->
         $(this).css('opacity', .2)
 
 
+goOutside = ->
+  $scene = show 'outsideday'
+  $scene.on 'click', '.west', ->
+    hide 'outsideday'
+    doorOutside()
+  $scene.on 'click', '.south', ->
+    hide 'outsideday'
+    outsideNight()
+  $scene.on 'click', '.u', ->
+    message "Rawr ;-)"
+  $scene.on 'click', '.sky', ->
+    message "It's too bright to see the stars. You really like stars. They make you feel so small, and yet, paradoxically, they make you feel like you can do anything."
+
+outsideNight = ->
+  $scene = show 'outsidenight'
+  $scene.on 'click', '.north', ->
+    hide 'outsidenight'
+    goOutside()
+  $scene.on 'click', '.you', ->
+    message "You love this spot. You try to escape here once every few hours. There's just something so peaceful about the stars."
+  # TODO: Add generator/stars
+  $scene.on 'click', '.generator', ->
+    message "It's too dark to see, but this is where the generator for the switch assembly line is."
+  $scene.on 'click', '.stars', ->
+    message "You think you can make out Godelius Quantide and Leland L., the constellations you and your bro based your internet handles after."
+  # TODO: Switch
+  # TODO: When the generator is up, you can't see the stars.
+  # TODO: Find telescope in mom's room.
+  # TODO: Break into mom's room by firing the bullet found in your bro's room with the gun.
+  # TODO: Use the butcher knife to... thing. Maybe it gets the bullets.
+
+# Possible TODO: Add "choice" to bro's room to knock; if so, get a cool conversation :)
+
 # game is the first function called after load
-game = corridor
+game = goOutside
 
 # preload images (do after game declaration)
 $ ->

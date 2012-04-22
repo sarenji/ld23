@@ -261,6 +261,11 @@ a:hover {
   left: 0;
   background: url("../images/u.gif") no-repeat;
 }
+.u.small {
+  width: 48px;
+  height: 91px;
+  background: url("../images/usmall.gif") no-repeat;
+}
 #play1 {
   position: absolute;
   top: 0;
@@ -493,6 +498,54 @@ a:hover {
 #assembly .stairs {
   left: 98px;
   top: 309px;
+}
+#outsideday {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/gghouse.gif");
+}
+#outsideday .south {
+  right: 45px;
+  bottom: 35px;
+}
+#outsideday .west {
+  right: 190px;
+  top: 180px;
+}
+#outsideday .u {
+  top: 200px;
+  right: 100px;
+  left: auto;
+}
+#outsidenight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+#outsidenight .underside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: auto;
+  background: url("../images/underside.gif") top center no-repeat;
+  height: 318px;
+}
+#outsidenight .north {
+  right: 45px;
+  top: 35px;
+}
+#outsidenight .you {
+  position: absolute;
+  width: 48px;
+  height: 91px;
+  right: 66px;
+  top: 192px;
 }
 @-moz-keyframes bounce {
   0% {
