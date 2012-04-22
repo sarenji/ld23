@@ -315,6 +315,8 @@ corridor = ->
       message """
       Your bro's door is locked! You need to flip a switch somewhere.
       """
+      choice 'Knock on his door?', ->
+        message "There is no answer..."
     else
       hide 'scene2'
       broRoom()
@@ -727,7 +729,6 @@ broRoom = ->
       message "You put back the scythe like a nice boy."
     else
       message "You're already carrying something! You can't take his SCYTHE, brah."
-# Possible TODO: Add "choice" to bro's room to knock; if so, get a cool conversation :)
 
 fireGunAtSwitch = ->
   $scene = show 'assembly'
@@ -752,7 +753,6 @@ fireGunAtSwitch = ->
 
 endGame = ->
   $scene = show 'endscene'
-  # TODO show pic
   message "You look through the telescope.
 
   The stars... You feel a rush of power just as you feel small."
