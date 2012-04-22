@@ -653,8 +653,12 @@
       }
     });
     $scene.on('click', '.yourbroim', function() {
+      $scene.find('.yousad').removeClass('hidden');
       message("LL: Hey, Steve.\nLL: I'm hoping you're in my room by now. It's been well past two minutes.\nLL: what?????????\nLL: wait hold on switching usernames\n* LL is now known as GQ!\nGQ: ok what the noggin????????\nGQ: how are you talking to me?????????\nLL: Sorry, I should've let you know beforehand.\nGQ: yeah well um!!!!!!!!!!!!!!!! yeah!!!!!!!!!!\nLL: Uh, are you okay?\nGQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!\nLL: Uh, all right.\nLL: So, I finished my dimensional warper. I'm actually typing to you twenty hours in the future. I'll save YOU the fine nitty gritty, though.\nLL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.\nGQ: man this is fucked up!!!!!\nGQ: you talking to me in the future with your dead body right next to me\nGQ: i can feel its dead eyes boring into me like a knife-wielding clown about to have the last laugh\nLL: Uh.\nLL: You see a dead body? My dead body, in particular?\nLL: Are you just saying that ironically?\nGQ: i see your body here as unironically plain as day!!!!!!\nGQ: it is so unironic that i am using tricked out exclamation marks like this ok!!!!!!\nGQ: this whole thing is creeping me out more than that episode of jersey shore lovingly remastered in maximum jpeg compression!!!!!!\nLL: Wait, I'm dead?\nGQ: yes you got it! youre a regular sherlock bro!!!!!!!!\nLL: Okay.\nLL: That's odd.\nLL: I'll be back in a jiffy to check it out. Just sit tight before you go insane any further.\nGQ: n\n* LL signed off.\nGQ: o\nGQ: no\nGQ: wait\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: oh fuck!!!!!!!!!!\n* LL is offline and did not receive your message!");
-      return $(this).remove();
+      $(this).remove();
+      return $document.one('messageend', function() {
+        return $scene.find('.yousad').addClass('hidden');
+      });
     });
     return $scene.on('click', '.scythe', function() {
       var $scythe;

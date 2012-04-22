@@ -668,7 +668,7 @@ broRoom = ->
     else
       message "Your brother's dead body. Oh god!!!!!!!!"
   $scene.on 'click', '.yourbroim', ->
-    # TODO show image
+    $scene.find('.yousad').removeClass 'hidden'
     message """
     LL: Hey, Steve.
     LL: I'm hoping you're in my room by now. It's been well past two minutes.
@@ -710,6 +710,8 @@ broRoom = ->
     * LL is offline and did not receive your message!
     """
     $(this).remove()
+    $document.one 'messageend', ->
+      $scene.find('.yousad').addClass 'hidden'
   $scene.on 'click', '.scythe', ->
     $scythe = $(this)
     if !state.kind?
