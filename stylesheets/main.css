@@ -53,7 +53,7 @@ h1 {
   color: #333;
   background: #ddd;
   padding: 14px;
-  border-bottom: 20px solid #1a1d1f;
+  border-bottom: 20px solid #000;
 }
 #messagehitbox {
   position: absolute;
@@ -602,10 +602,10 @@ a:hover {
 }
 #outsidenight .generator {
   position: absolute;
-  bottom: 0;
+  bottom: 145px;
   left: 170px;
   width: 260px;
-  height: 220px;
+  height: 235px;
 }
 #outsidefakesun {
   position: absolute;

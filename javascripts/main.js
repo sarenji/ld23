@@ -471,22 +471,35 @@
       }
     });
     $scene.on('click', '.assemblyswitch', function() {
-      var modifier;
+      var $switch, modifier;
+      $switch = $(this);
       if (state.assemblySwitchOn) {
         if (state.kind === 'scythe') {
-          return choice("Use the SCYTHE to pull down the switch?", function() {
-            message("You use the scythe to flip the switch off! Thank Godelius.");
-            return state.assemblySwitchOn = false;
-          });
+          if (state.tookStairs) {
+            return message("You can't reach the switch with your SCYTHE!");
+          } else {
+            return choice("Use the SCYTHE to pull down the switch?", function() {
+              message("You use the scythe to flip the switch off! Thank Godelius.");
+              state.assemblySwitchOn = false;
+              return $switch.removeClass('on');
+            });
+          }
         } else {
           return message("Bluuhhhh. You have no idea how to turn it back off. You need something to reach around the switch and pull it down.");
         }
       } else if (state.telescope) {
         return message("You are never flipping this switch on again.");
+      } else if (state.kind === 'scythe') {
+        return choice('Do you actually want to flip this switch with the SCYTHE?', function() {
+          message("You flip the switch without drama.");
+          state.assemblySwitchOn = true;
+          return $switch.addClass('on');
+        });
       } else if (state.kind === 'gun') {
         return choice("Do you ACTUALLY want to poke the switch up with the GUN? You don't even know how you're turning the switch back off!", function() {
           message("You flip the switch. There is a shuddering boom.\n\nSo young, and the gates of hell have already opened for you.");
-          return state.assemblySwitchOn = true;
+          state.assemblySwitchOn = true;
+          return $switch.addClass('on');
         });
       } else {
         modifier = (state.kind != null) && state.kind !== "stairs" ? " with your " + (state.kind.toUpperCase()) : "";
@@ -648,16 +661,14 @@
         return choice("Take BRO'S SCYTHE?", function() {
           state.kind = "scythe";
           $scythe.css('opacity', .2);
-          return message("You take your brother's prized scythe.        You feel kinda like the reaper of death, all things considering.");
+          return message("You take your bro's prized SCYTHE.        You feel kinda like the reaper of death, all things considering.");
         });
       } else if (state.kind === 'scythe') {
-        return choice("Put back BRO'S SCYTHE?", function() {
-          state.kind = null;
-          $scythe.css('opacity', 1);
-          return message("You put back the scythe like a nice boy.");
-        });
+        state.kind = null;
+        $scythe.css('opacity', 1);
+        return message("You put back the scythe like a nice boy.");
       } else {
-        return message("You're already carrying something! You can't take his scythe, brah.");
+        return message("You're already carrying something! You can't take his SCYTHE, brah.");
       }
     });
   };
@@ -671,9 +682,9 @@
       $scene.find('.brodie').removeClass('hidden');
       return setTimeout(function() {
         $scene.find('.brodie').remove();
-        message("You hear a rumbling outside as your brother's death triggers the switch.");
+        message("ohgodohgodohgod you just killed your brother ohgodohgodohgod why cant you stop smiling ohgodohgodohgod");
         return $document.one('messageend', function() {
-          message("ohgodohgodohgod you just killed your brother ohgodohgodohgod why cant you stop smiling ohgodohgodohgod");
+          message("You hear a rumbling outside as your brother's future death triggers the switch.");
           return $document.one('messageend', function() {
             $scene.find('.firegun').remove();
             state.telescope = true;
@@ -701,8 +712,12 @@
             $scene.find('.monster').removeClass('hidden');
             message("STEVE: dad?");
             return $document.one('messageend', function() {
-              hide('endscene');
-              return showCredits();
+              $scene.find('.monsterworld').removeClass('hidden');
+              message("You are so small.");
+              return $document.one('messageend', function() {
+                hide('endscene');
+                return showCredits();
+              });
             });
           });
         });

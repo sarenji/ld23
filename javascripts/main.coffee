@@ -475,15 +475,25 @@ assembly = ->
         """
 
   $scene.on 'click', '.assemblyswitch', ->
+    $switch = $(this)
     if state.assemblySwitchOn
       if state.kind == 'scythe'
-        choice "Use the SCYTHE to pull down the switch?", ->
-          message "You use the scythe to flip the switch off! Thank Godelius."
-          state.assemblySwitchOn = false
+        if state.tookStairs
+          message "You can't reach the switch with your SCYTHE!"
+        else
+          choice "Use the SCYTHE to pull down the switch?", ->
+            message "You use the scythe to flip the switch off! Thank Godelius."
+            state.assemblySwitchOn = false
+            $switch.removeClass 'on'
       else
         message "Bluuhhhh. You have no idea how to turn it back off. You need something to reach around the switch and pull it down."
     else if state.telescope
       message "You are never flipping this switch on again."
+    else if state.kind == 'scythe'
+      choice 'Do you actually want to flip this switch with the SCYTHE?', ->
+        message "You flip the switch without drama."
+        state.assemblySwitchOn = true
+        $switch.addClass 'on'
     else if state.kind == 'gun'
       choice "Do you ACTUALLY want to poke the switch up with the GUN? You don't even know how you're turning the switch back off!", ->
         message """
@@ -492,6 +502,7 @@ assembly = ->
         So young, and the gates of hell have already opened for you.
         """
         state.assemblySwitchOn = true
+        $switch.addClass 'on'
     else
       modifier = if state.kind? and state.kind != "stairs" then " with your #{state.kind.toUpperCase()}" else ""
       message """
@@ -704,16 +715,15 @@ broRoom = ->
       choice "Take BRO'S SCYTHE?", ->
         state.kind = "scythe"
         $scythe.css 'opacity', .2
-        message "You take your brother's prized scythe.
+        message "You take your bro's prized SCYTHE.
 
         You feel kinda like the reaper of death, all things considering."
     else if state.kind == 'scythe'
-      choice "Put back BRO'S SCYTHE?", ->
-        state.kind = null
-        $scythe.css 'opacity', 1
-        message "You put back the scythe like a nice boy."
+      state.kind = null
+      $scythe.css 'opacity', 1
+      message "You put back the scythe like a nice boy."
     else
-      message "You're already carrying something! You can't take his scythe, brah."
+      message "You're already carrying something! You can't take his SCYTHE, brah."
 # Possible TODO: Add "choice" to bro's room to knock; if so, get a cool conversation :)
 
 fireGunAtSwitch = ->
@@ -724,9 +734,9 @@ fireGunAtSwitch = ->
     $scene.find('.brodie').removeClass 'hidden'
     setTimeout ->
       $scene.find('.brodie').remove()
-      message "You hear a rumbling outside as your brother's death triggers the switch."
+      message "ohgodohgodohgod you just killed your brother ohgodohgodohgod why cant you stop smiling ohgodohgodohgod"
       $document.one 'messageend', ->
-        message "ohgodohgodohgod you just killed your brother ohgodohgodohgod why cant you stop smiling ohgodohgodohgod"
+        message "You hear a rumbling outside as your brother's future death triggers the switch."
         $document.one 'messageend', ->
           $scene.find('.firegun').remove()
           state.telescope = true
@@ -759,8 +769,11 @@ endGame = ->
           $scene.find('.monster').removeClass('hidden')
           message "STEVE: dad?"
           $document.one 'messageend', ->
-            hide 'endscene'
-            showCredits()
+            $scene.find('.monsterworld').removeClass('hidden')
+            message "You are so small."
+            $document.one 'messageend', ->
+              hide 'endscene'
+              showCredits()
 
 showCredits = ->
   $scene = show 'showcredits'
