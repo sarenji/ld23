@@ -220,9 +220,9 @@
     $scene.find('.tinyworld').remove();
     $scene.find('.monster').remove();
     $scene.find('.monsterworld').remove();
-    message("You and him both know it'll take you way longer than two minutes. Getting around this house is impossible! But you have to try. Your brother might be annoying slash amusing slash cute with his \"revelations,\" but he always makes cool stuff.");
+    message("You and him both know it'll take you way longer than two minutes. Getting around this house is impossible! But you have to try. Your bro might be annoying slash amusing slash cute with his \"revelations,\" but he always makes cool stuff.");
     return $document.one('messageend', function() {
-      message("Your mother is extremely private, so she installed switches everywhere to deter anyone from stealing her things (or her kids). She is especially protective of your little brother and never lets him unlock his own door.\n\nYou can't remember the exact sequences to the switches, because she changes them every night, somehow without you noticing. And some switches depend on another switch being pressed.\n\nYou have no idea how she keeps track of all these switches in her head. It would be so impressive if it wasn't SO INFURIATING.\n\nBut first, why don't you turn on the lights?");
+      message("Your mother is extremely private, so she installed switches everywhere to deter anyone from stealing her things (or her kids). She is especially protective of your little bro and never lets him unlock his own door.\n\nYou can't remember the exact sequences to the switches, because she changes them every night, somehow without you noticing. And some switches depend on another switch being pressed.\n\nYou have no idea how she keeps track of all these switches in her head. It would be so impressive if it wasn't SO INFURIATING.\n\nBut first, why don't you turn on the lights?");
       return $document.one('messageend', function() {
         return beginPlaying();
       });
@@ -315,13 +315,29 @@
       return beginPlaying();
     });
     $scene.on('click', '.east', function() {
-      return message("You, uh... would really rather not. Your mother loves her games.");
+      if (state.momRoomCount == null) state.momRoomCount = 0;
+      switch (state.momRoomCount) {
+        case 0:
+          message("No.");
+          break;
+        case 1:
+          message("Come on, no!");
+          break;
+        case 2:
+          message("NO.");
+          break;
+        default:
+          message("NO!!!!!!!!!!!!!!!!!!!!!!!");
+      }
+      return state.momRoomCount++;
     });
     $scene.on('click', '.west', function() {
       if (!state.outsideSwitchOn) {
         message("Your bro's door is locked! You need to flip a switch somewhere.");
-        return choice('Knock on his door?', function() {
-          return message("There is no answer...");
+        return $document.one('messageend', function() {
+          return choice('Knock on his door?', function() {
+            return message("There is no answer...");
+          });
         });
       } else {
         hide('scene2');
@@ -352,6 +368,9 @@
     $scene.on('click', '.south', function() {
       hide('kitchen');
       return corridor();
+    });
+    $scene.on('click', '.fridge', function() {
+      return message("Technically, this is your fridge. Practically, it's your bro's. He uses it to hibernate experimental killer robots at sub-zero temperatures. You really don't want to open the fridge.");
     });
     $scene.on('click', '.sink', function() {
       if (state.kind === "stairs") {
@@ -652,7 +671,7 @@
       var $bullet;
       $bullet = $(this);
       return choice("Take POORLY DRAWN, INFINITELY FIREABLE BULLET?", function() {
-        message("You put the bullet in your pocket.");
+        message("You put the POORLY DRAWN, INFINITELY FIREABLE BULLET in your pocket.");
         $bullet.remove();
         return state.hasBullet = true;
       });
@@ -660,6 +679,15 @@
     $scene.on('click', '.east', function() {
       hide('broroom');
       return corridor();
+    });
+    $scene.on('click', '.pipes', function() {
+      return message("When your bro was younger, he always made these pipes just to hide in them. It was a little cute, actually!");
+    });
+    $scene.on('click', '.bigcomp', function() {
+      return message("You wish you knew what this thing does. Compute gits??? Is that right???");
+    });
+    $scene.on('click', '.comp', function() {
+      return message("Your bro's internet handle is Leland L., or LL, a combination of a constellation and an addiction to L from Death Note. You never understood his fascination with death.");
     });
     $scene.on('click', '.bro', function() {
       if (!state.sawBro) {
@@ -671,12 +699,12 @@
           return $scene.find('.yourbroim').removeClass('hidden');
         });
       } else {
-        return message("Your brother's dead body. Oh god!!!!!!!!");
+        return message("Your bro's dead body. Oh god!!!!!!!!");
       }
     });
     $scene.on('click', '.yourbroim', function() {
       $scene.find('.yousad').removeClass('hidden');
-      message("LL: Hey, Steve.\nLL: I'm hoping you're in my room by now. It's been well past two minutes.\nLL: what?????????\nLL: wait hold on switching usernames\n* LL is now known as GQ!\nGQ: ok what the noggin????????\nGQ: how are you talking to me?????????\nLL: Sorry, I should've let you know beforehand.\nGQ: yeah well um!!!!!!!!!!!!!!!! yeah!!!!!!!!!!\nLL: Uh, are you okay?\nGQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!\nLL: Uh, all right.\nLL: So, I finished my dimensional warper. I'm actually typing to you twenty hours in the future. I'll save YOU the fine nitty gritty, though.\nLL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.\nGQ: man this is fucked up!!!!!\nGQ: you talking to me in the future with your dead body right next to me\nGQ: i can feel its dead eyes boring into me like a knife-wielding clown about to have the last laugh\nLL: Uh.\nLL: You see a dead body? My dead body, in particular?\nLL: Are you just saying that ironically?\nGQ: i see your body here as unironically plain as day!!!!!!\nGQ: it is so unironic that i am using tricked out exclamation marks like this ok!!!!!!\nGQ: this whole thing is creeping me out more than that episode of jersey shore lovingly remastered in maximum jpeg compression!!!!!!\nLL: Wait, I'm dead?\nGQ: yes you got it! youre a regular sherlock bro!!!!!!!!\nLL: Okay.\nLL: That's odd.\nLL: I'll be back in a jiffy to check it out. Just sit tight before you go insane any further.\nGQ: n\n* LL signed off.\nGQ: o\nGQ: no\nGQ: wait\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: oh fuck!!!!!!!!!!\n* LL is offline and did not receive your message!");
+      message("LL: Hey, Steve.\nLL: I'm hoping you're in my room by now. It's been well past two minutes.\nLL: what?????????\nLL: wait hold on switching usernames\n* LL is now known as GQ!\nGQ: ok what the noggin????????\nGQ: how are you talking to me?????????\nLL: Sorry, I should've let you know beforehand.\nGQ: yeah well um!!!!!!!!!!!!!!!! yeah!!!!!!!!!!\nLL: Uh, are you okay?\nGQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!\nLL: Uh, all right.\nLL: So, I finished my dimensional warper. I'm actually typing to you twenty hours in the future. I'll save YOU the fine nitty gritty, though.\nLL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.\nGQ: man this is fucked up!!!!!\nGQ: you talking to me in the future with your dead body lying behind me present tense\nGQ: i can feel its dead eyes boring into me like a knife-wielding clown about to have the last laugh\nLL: Uh.\nLL: You see a dead body? My dead body, in particular?\nLL: Are you just saying that ironically?\nGQ: i see your body here as unironically plain as day!!!!!!\nGQ: it is so unironic that i am using tricked out exclamation marks like this ok!!!!!!\nGQ: this whole thing is creeping me out more than that episode of jersey shore lovingly remastered in maximum jpeg compression!!!!!!\nLL: Wait, I'm dead?\nGQ: yes you got it! youre a regular sherlock bro!!!!!!!!\nLL: Okay.\nLL: That's very interesting.\nLL: I'll come check it out. Just sit tight before you go insane or whatever.\nGQ: n\n* LL signed off.\nGQ: o\nGQ: no\nGQ: wait\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: oh fuck!!!!!!!!!!\nGQ: id hope you die but you are already dead!!!!!!!!!!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!");
       $(this).remove();
       return $document.one('messageend', function() {
         return $scene.find('.yousad').addClass('hidden');
@@ -710,9 +738,9 @@
       $scene.find('.brodie').removeClass('hidden');
       return setTimeout(function() {
         $scene.find('.brodie').remove();
-        message("ohgodohgodohgod you just killed your brother ohgodohgodohgod why cant you stop smiling ohgodohgodohgod");
+        message("ohgodohgodohgod you just killed your bro ohgodohgodohgod why cant you stop smiling ohgodohgodohgod");
         return $document.one('messageend', function() {
-          message("You hear a rumbling outside as your brother's future death triggers the switch.");
+          message("You hear a rumbling outside as your bro's future death triggers the switch.");
           return $document.one('messageend', function() {
             $scene.find('.firegun').remove();
             state.telescope = true;
@@ -758,7 +786,7 @@
     return $scene = show('showcredits');
   };
 
-  game = play1;
+  game = broRoom;
 
   $(function() {
     preloadImage('images/assembly.gif');

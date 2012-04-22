@@ -461,6 +461,13 @@ a:hover {
   right: 0;
   bottom: 0;
 }
+#kitchen .fridge {
+  position: absolute;
+  top: 20px;
+  left: 304px;
+  width: 200px;
+  height: 360px;
+}
 #kitchen .south {
   top: 357px;
   left: 258px;
@@ -742,6 +749,27 @@ a:hover {
 #broroom .scythe {
   left: 338px;
   top: 355px;
+}
+#broroom .bigcomp {
+  position: absolute;
+  top: 30px;
+  left: 168px;
+  width: 278px;
+  height: 292px;
+}
+#broroom .pipes {
+  position: absolute;
+  top: 90px;
+  left: 0;
+  width: 167px;
+  height: 246px;
+}
+#broroom .comp {
+  position: absolute;
+  top: 208px;
+  right: 88px;
+  width: 120px;
+  height: 130px;
 }
 #showcredits {
   position: absolute;

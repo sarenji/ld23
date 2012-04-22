@@ -220,11 +220,11 @@ play2 = ->
   $scene.find('.monster').remove()
   $scene.find('.monsterworld').remove()
   message """
-  You and him both know it'll take you way longer than two minutes. Getting around this house is impossible! But you have to try. Your brother might be annoying slash amusing slash cute with his "revelations," but he always makes cool stuff.
+  You and him both know it'll take you way longer than two minutes. Getting around this house is impossible! But you have to try. Your bro might be annoying slash amusing slash cute with his "revelations," but he always makes cool stuff.
   """
   $document.one 'messageend', ->
     message """
-    Your mother is extremely private, so she installed switches everywhere to deter anyone from stealing her things (or her kids). She is especially protective of your little brother and never lets him unlock his own door.
+    Your mother is extremely private, so she installed switches everywhere to deter anyone from stealing her things (or her kids). She is especially protective of your little bro and never lets him unlock his own door.
 
     You can't remember the exact sequences to the switches, because she changes them every night, somehow without you noticing. And some switches depend on another switch being pressed.
 
@@ -328,16 +328,27 @@ corridor = ->
     hide 'scene2'
     beginPlaying()
   $scene.on 'click', '.east', ->
-    message """
-    You, uh... would really rather not. Your mother loves her games.
-    """
+    state.momRoomCount ?= 0
+    switch state.momRoomCount
+      when 0
+        message """
+        No.
+        """
+      when 1
+        message "Come on, no!"
+      when 2
+        message "NO."
+      else
+        message "NO!!!!!!!!!!!!!!!!!!!!!!!"
+    state.momRoomCount++
   $scene.on 'click', '.west', ->
     if !state.outsideSwitchOn
       message """
       Your bro's door is locked! You need to flip a switch somewhere.
       """
-      choice 'Knock on his door?', ->
-        message "There is no answer..."
+      $document.one 'messageend', ->
+        choice 'Knock on his door?', ->
+          message "There is no answer..."
     else
       hide 'scene2'
       broRoom()
@@ -361,6 +372,8 @@ kitchen = ->
   $scene.on 'click', '.south', ->
     hide 'kitchen'
     corridor()
+  $scene.on 'click', '.fridge', ->
+    message "Technically, this is your fridge. Practically, it's your bro's. He uses it to hibernate experimental killer robots at sub-zero temperatures. You really don't want to open the fridge."
   $scene.on 'click', '.sink', ->
     if state.kind == "stairs"
       choice "Put STAIRS in front of the sink?", ->
@@ -666,12 +679,18 @@ broRoom = ->
     $bullet = $(this)
     choice "Take POORLY DRAWN, INFINITELY FIREABLE BULLET?", ->
       # TODO: turn bullet into a `kind`.
-      message "You put the bullet in your pocket."
+      message "You put the POORLY DRAWN, INFINITELY FIREABLE BULLET in your pocket."
       $bullet.remove()
       state.hasBullet = true
   $scene.on 'click', '.east', ->
     hide 'broroom'
     corridor()
+  $scene.on 'click', '.pipes', ->
+    message "When your bro was younger, he always made these pipes just to hide in them. It was a little cute, actually!"
+  $scene.on 'click', '.bigcomp', ->
+    message "You wish you knew what this thing does. Compute gits??? Is that right???"
+  $scene.on 'click', '.comp', ->
+    message "Your bro's internet handle is Leland L., or LL, a combination of a constellation and an addiction to L from Death Note. You never understood his fascination with death."
   $scene.on 'click', '.bro', ->
     if !state.sawBro
       state.sawBro = true
@@ -689,7 +708,7 @@ broRoom = ->
         $scene.find('.brodeathdetail').addClass 'hidden'
         $scene.find('.yourbroim').removeClass 'hidden'
     else
-      message "Your brother's dead body. Oh god!!!!!!!!"
+      message "Your bro's dead body. Oh god!!!!!!!!"
   $scene.on 'click', '.yourbroim', ->
     $scene.find('.yousad').removeClass 'hidden'
     message """
@@ -708,7 +727,7 @@ broRoom = ->
     LL: So, I finished my dimensional warper. I'm actually typing to you twenty hours in the future. I'll save YOU the fine nitty gritty, though.
     LL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.
     GQ: man this is fucked up!!!!!
-    GQ: you talking to me in the future with your dead body right next to me
+    GQ: you talking to me in the future with your dead body lying behind me present tense
     GQ: i can feel its dead eyes boring into me like a knife-wielding clown about to have the last laugh
     LL: Uh.
     LL: You see a dead body? My dead body, in particular?
@@ -719,8 +738,8 @@ broRoom = ->
     LL: Wait, I'm dead?
     GQ: yes you got it! youre a regular sherlock bro!!!!!!!!
     LL: Okay.
-    LL: That's odd.
-    LL: I'll be back in a jiffy to check it out. Just sit tight before you go insane any further.
+    LL: That's very interesting.
+    LL: I'll come check it out. Just sit tight before you go insane or whatever.
     GQ: n
     * LL signed off.
     GQ: o
@@ -730,6 +749,8 @@ broRoom = ->
     * LL is offline and did not receive your message!
     * LL is offline and did not receive your message!
     GQ: oh fuck!!!!!!!!!!
+    GQ: id hope you die but you are already dead!!!!!!!!!!
+    * LL is offline and did not receive your message!
     * LL is offline and did not receive your message!
     """
     $(this).remove()
@@ -759,9 +780,9 @@ fireGunAtSwitch = ->
     $scene.find('.brodie').removeClass 'hidden'
     setTimeout ->
       $scene.find('.brodie').remove()
-      message "ohgodohgodohgod you just killed your brother ohgodohgodohgod why cant you stop smiling ohgodohgodohgod"
+      message "ohgodohgodohgod you just killed your bro ohgodohgodohgod why cant you stop smiling ohgodohgodohgod"
       $document.one 'messageend', ->
-        message "You hear a rumbling outside as your brother's future death triggers the switch."
+        message "You hear a rumbling outside as your bro's future death triggers the switch."
         $document.one 'messageend', ->
           $scene.find('.firegun').remove()
           state.telescope = true
