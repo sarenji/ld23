@@ -300,7 +300,10 @@
     });
     $scene.on('click', '.west', function() {
       if (!state.outsideSwitchOn) {
-        return message("Your bro's door is locked! You need to flip a switch somewhere.");
+        message("Your bro's door is locked! You need to flip a switch somewhere.");
+        return choice('Knock on his door?', function() {
+          return message("There is no answer...");
+        });
       } else {
         hide('scene2');
         return broRoom();
@@ -741,6 +744,7 @@
   $(function() {
     preloadImage('images/assembly.gif');
     preloadImage('images/bro.gif');
+    preloadImage('images/brodeathdetail.gif');
     preloadImage('images/brodie.gif');
     preloadImage('images/broroom.gif');
     preloadImage('images/bullet.gif');
@@ -748,6 +752,7 @@
     preloadImage('images/corridor.gif');
     preloadImage('images/dooroutside.gif');
     preloadImage('images/earth.gif');
+    preloadImage('images/eye.gif');
     preloadImage('images/firegun.gif');
     preloadImage('images/ggcomp.gif');
     preloadImage('images/gghouse.gif');
@@ -763,9 +768,11 @@
     preloadImage('images/scythe.gif');
     preloadImage('images/sinkstairs.gif');
     preloadImage('images/stairs.gif');
+    preloadImage('images/star.gif');
     preloadImage('images/stars.gif');
     preloadImage('images/switchdetail.gif');
     preloadImage('images/telescope.gif');
+    preloadImage('images/telescopelens.gif');
     preloadImage('images/tentacles.gif');
     preloadImage('images/tinyworld.gif');
     preloadImage('images/tinyworldwhole.gif');
@@ -777,6 +784,7 @@
     preloadImage('images/you.gif');
     preloadImage('images/yourroom.gif');
     preloadImage('images/yourroombright.gif');
+    preloadImage('images/yousad.gif');
     preloadImage('images/buttons/continue.gif');
     preloadImage('images/buttons/south.gif');
     preloadImage('images/buttons/north.gif');
