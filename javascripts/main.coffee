@@ -45,7 +45,7 @@ colorize = (message) ->
   messages = message.split('\n')
   for msg, i in messages
     msg = msg.replace(/^(LL: .*)/, '<span class="ll">$1</span>')
-    msg = msg.replace(/^(Steve: .*)/, '<span class="gq">$1</span>')
+    msg = msg.replace(/^(STEVE: .*)/, '<span class="gq">$1</span>')
     msg = msg.replace(/^(GQ: .*)/, '<span class="gq">$1</span>')
     messages[i] = msg
   messages.join '\n'
@@ -111,7 +111,7 @@ enterName = ->
 play1 = ->
   $play = show 'play1'
   message "This is you! You're a pretty handsome dude :)"
-  $document.on 'messageend', ->
+  $document.one 'messageend', ->
     enterName()
 
 introYourRoom = ->
@@ -388,7 +388,7 @@ swap = (kind) ->
         when "gun"
           message "You take the UNLOADED GUN and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone."
         when "butcher knife"
-          message "You used to help your mother with cooking, back when she was pregnant with your bro. Unfortunately you slipped and fell while holding the knife, and we had a dinner of blood."
+          message "You used to help your FATHER with cooking, back when your mother was pregnant with your bro. You slipped and fell while holding the knife and there was too much blood and... Well, your father's not around anymore."
   else if !state.sinkHasStairs
     message """
     You're too short to reach this #{kind.toUpperCase()}. You may be incredibly handsome, but you are still short.
@@ -445,6 +445,9 @@ assembly = ->
     hide 'assembly'
     kitchen()
   $scene.on 'click', '.momswitch', ->
+    if state.telescope
+      message "You don't want anything to do with this switch anymore."
+      return
     switch state.kind
       when "hammer"
         message """
@@ -456,6 +459,7 @@ assembly = ->
         """
       when "gun"
         if state.hasBullet
+          hide 'assembly'
           fireGunAtSwitch()
         else
           message """
@@ -472,8 +476,14 @@ assembly = ->
 
   $scene.on 'click', '.assemblyswitch', ->
     if state.assemblySwitchOn
-      # TODO scythe
-      message "Bluuhhhh. You have no idea how to turn it back off. You need something to reach around the switch and pull it down. A pyrrhic victory indeed."
+      if state.kind == 'scythe'
+        choice "Use the SCYTHE to pull down the switch?", ->
+          message "You use the scythe to flip the switch off! Thank Godelius."
+          state.assemblySwitchOn = false
+      else
+        message "Bluuhhhh. You have no idea how to turn it back off. You need something to reach around the switch and pull it down."
+    else if state.telescope
+      message "You are never flipping this switch on again."
     else if state.kind == 'gun'
       choice "Do you ACTUALLY want to poke the switch up with the GUN? You don't even know how you're turning the switch back off!", ->
         message """
@@ -542,16 +552,14 @@ outsideNight = ->
     goOutside()
   $scene.on 'click', '.you', ->
     message "You love this spot. You try to escape here once every few hours. There's just something so peaceful about the stars."
-  # TODO: Add generator/stars
   $scene.on 'click', '.generator', ->
     message "It's too dark to see, but this is where the generator for the switch assembly line is."
   $scene.on 'click', '.stars', ->
-    message "You think you can make out Godelius Quantide and Leland L., the constellations you and your bro based your internet handles after."
-  # TODO: Switch
-  # TODO: When the generator is up, you can't see the stars.
-  # TODO: Find telescope in mom's room.
-  # TODO: Break into mom's room by firing the bullet found in your bro's room with the gun.
-  # TODO: Use the butcher knife to... thing. Maybe it gets the bullets.
+    message "You think you can make out Godelius Quantide and Leland L., the constellations you and your bro based your internet handles after. You'd be able to tell if you could find the switch for your TELESCOPE."
+  $scene.on 'click', '.telescope', ->
+    choice "Look through the TELESCOPE?", ->
+      hide 'outsidenight'
+      endGame()
 
 outsideFakeSun = ->
   $scene = show 'outsidefakesun'
@@ -560,7 +568,7 @@ outsideFakeSun = ->
     goOutside()
   $scene.on 'click', '.you', ->
     message "Sometimes you and your bro like to frolick across this field like idiotic tools. After your bro began discovering his hacker interests, not so much anymore."
-  $scene.on 'click', '.sky', ->
+  $scene.on 'click', '.sky, .telescope', ->
     message "The generator's artificial sun emits such a bright light that you can't see the stars."
   $scene.on 'click', '.generator', ->
     message "The generator. It's a monstrous monster of a machine that powers the switch assembly line."
@@ -635,13 +643,13 @@ broRoom = ->
       state.sawBro = true
       # TODO: Show image
       message """
-      Steve: oh god
-      Steve: oh god
-      Steve: this cant be possible
-      Steve: tell me youre just having another one of your revelations
-      Steve: bro?
-      Steve: jon?
-      Steve: OH SHIT
+      STEVE: oh god
+      STEVE: oh god
+      STEVE: this cant be possible
+      STEVE: tell me youre just having another one of your revelations
+      STEVE: bro?
+      STEVE: jon?
+      STEVE: OH SHIT
       """
       $document.one 'messageend', ->
         $scene.find('.yourbroim').removeClass 'hidden'
@@ -650,14 +658,15 @@ broRoom = ->
   $scene.on 'click', '.yourbroim', ->
     # TODO show image
     message """
-    LL: Hey, Steve, I'm hoping you're in my room by now.
+    LL: Hey, Steve.
+    LL: I'm hoping you're in my room by now. It's been well past two minutes.
     LL: what?????????
-    LL: wait hold on let me switch usernames
+    LL: wait hold on switching usernames
     * LL is now known as GQ!
     GQ: ok what the noggin????????
     GQ: how are you talking to me?????????
-    LL: Sorry, I should've told you beforehand.
-    GQ: yeah well!!!!!!!!!!!!!!!!
+    LL: Sorry, I should've let you know beforehand.
+    GQ: yeah well um!!!!!!!!!!!!!!!! yeah!!!!!!!!!!
     LL: Uh, are you okay?
     GQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!
     LL: Uh, all right.
@@ -665,14 +674,14 @@ broRoom = ->
     LL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.
     GQ: man this is fucked up!!!!!
     GQ: you talking to me in the future with your dead body right next to me
-    GQ: i can feel its dead eyes boring into me like a knife-gripping clown about to have the last laugh
+    GQ: i can feel its dead eyes boring into me like a knife-wielding clown about to have the last laugh
     LL: Uh.
     LL: You see a dead body? My dead body, in particular?
     LL: Are you just saying that ironically?
     GQ: i see your body here as unironically plain as day!!!!!!
-    GQ: it is so unironic that i am using freaked out exclamation marks like this ok!!!!!!
+    GQ: it is so unironic that i am using tricked out exclamation marks like this ok!!!!!!
     GQ: this whole thing is creeping me out more than that episode of jersey shore lovingly remastered in maximum jpeg compression!!!!!!
-    LL: I'm dead?
+    LL: Wait, I'm dead?
     GQ: yes you got it! youre a regular sherlock bro!!!!!!!!
     LL: Okay.
     LL: That's odd.
@@ -708,43 +717,94 @@ broRoom = ->
 # Possible TODO: Add "choice" to bro's room to knock; if so, get a cool conversation :)
 
 fireGunAtSwitch = ->
-  $scene = find 'assembly'
-  # TODO cutscene!!!!
-  message """
-  You fire the gun at the switch. Your BRO appears out of nowhere! Oh bollocks! The bullet bores into his forehead. Blood spatters. He's knocked backward into the blood-stained switch, which triggers.
+  $scene = show 'assembly'
+  $scene.find('.south').addClass 'hidden'
+  $scene.find('.firegun').removeClass 'hidden'
+  setTimeout ->
+    $scene.find('.brodie').removeClass 'hidden'
+    setTimeout ->
+      $scene.find('.brodie').remove()
+      message "You hear a rumbling outside as your brother's death triggers the switch."
+      $document.one 'messageend', ->
+        message "ohgodohgodohgod you just killed your brother ohgodohgodohgod why cant you stop smiling ohgodohgodohgod"
+        $document.one 'messageend', ->
+          $scene.find('.firegun').remove()
+          state.telescope = true
+          $('.telescope').removeClass('hidden')
+          $scene.find('.south').removeClass 'hidden'
+          hide 'assembly'
+          assembly()
+    , 1000
+  , 2000
 
-  Suddenly your BRO vanishes again a few minutes into the past, in the location he originally wanted.
+endGame = ->
+  $scene = show 'endscene'
+  # TODO show pic
+  message "You look through the telescope."
+  $document.one 'messageend', ->
+    message "The stars... You feel a rush of power just as you feel small."
+    $document.one 'messageend', ->
+      # Show sparkle
+      message """
+      STEVE: wait
+      STEVE: what is that
+      """
+      $document.one 'messageend', ->
+        # Show monster as 16x16
+        message """
+        STEVE: oh no
+        STEVE: is that
+        """
+        $document.one 'messageend', ->
+          $scene.find('.monster').removeClass('hidden')
+          message "STEVE: dad?"
+          $document.one 'messageend', ->
+            hide 'endscene'
+            showCredits()
 
-  You hear a rumbling outside.
-  """
-  state.telescope = true
-
+showCredits = ->
+  $scene = show 'showcredits'
 
 # game is the first function called after load
-game = assembly
+game = play1
 
 # preload images (do after game declaration)
 $ ->
   preloadImage 'images/assembly.gif'
+  preloadImage 'images/bro.gif'
+  preloadImage 'images/brodie.gif'
+  preloadImage 'images/broroom.gif'
+  preloadImage 'images/bullet.gif'
+  preloadImage 'images/butcher.gif'
   preloadImage 'images/corridor.gif'
   preloadImage 'images/dooroutside.gif'
   preloadImage 'images/earth.gif'
+  preloadImage 'images/firegun.gif'
   preloadImage 'images/ggcomp.gif'
   preloadImage 'images/gghouse.gif'
+  preloadImage 'images/gun.gif'
+  preloadImage 'images/hammer.gif'
   preloadImage 'images/kitchen.gif'
   preloadImage 'images/llim.gif'
   preloadImage 'images/meteor.gif'
   preloadImage 'images/monster.gif'
   preloadImage 'images/monsterworld.gif'
+  preloadImage 'images/planks.gif'
   preloadImage 'images/scene1.gif'
-  preloadImage 'images/stars.gif'
+  preloadImage 'images/scythe.gif'
+  preloadImage 'images/sinkstairs.gif'
   preloadImage 'images/stairs.gif'
+  preloadImage 'images/stars.gif'
+  preloadImage 'images/switchdetail.gif'
+  preloadImage 'images/telescope.gif'
   preloadImage 'images/tentacles.gif'
   preloadImage 'images/tinyworld.gif'
   preloadImage 'images/tinyworldwhole.gif'
   preloadImage 'images/u.gif'
   preloadImage 'images/underside.gif'
+  preloadImage 'images/undersideday.gif'
   preloadImage 'images/usmall.gif'
+  preloadImage 'images/woosh.png'
   preloadImage 'images/you.gif'
   preloadImage 'images/yourroom.gif'
   preloadImage 'images/yourroombright.gif'

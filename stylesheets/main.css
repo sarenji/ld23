@@ -139,15 +139,6 @@ a:hover {
   bottom: 0;
   background: url("../images/stars.gif") repeat;
 }
-@-webkit-keyframes fromtop {
-  0% {
-    background-position: 0% 0%;
-  }
-
-  100% {
-    background-position: 0 -459px;
-  }
-}
 .stars {
   -webkit-animation-name: fromtop;
   -moz-animation-name: fromtop;
@@ -260,8 +251,8 @@ a:hover {
 }
 .bro {
   position: absolute;
-  width: 235px;
-  height: 120px;
+  width: 227px;
+  height: 133px;
   background: url("../images/bro.gif");
 }
 .yourbroim {
@@ -285,9 +276,17 @@ a:hover {
 }
 .bullet {
   position: absolute;
-  background: url("../images/bullet.gif");
-  width: 13px;
-  height: 15px;
+  background: url("../images/bullet.gif") center center no-repeat;
+  width: 30px;
+  height: 30px;
+}
+.telescope {
+  position: absolute;
+  background: url("../images/telescope.gif");
+  width: 103px;
+  height: 88px;
+  left: 415px;
+  top: 211px;
 }
 .scythe {
   position: absolute;
@@ -497,6 +496,7 @@ a:hover {
   left: 0;
   right: 0;
   bottom: 0;
+  overflow: hidden;
 }
 #assembly .south {
   top: 357px;
@@ -523,6 +523,34 @@ a:hover {
 #assembly .stairs {
   left: 98px;
   top: 309px;
+}
+#assembly .brodie {
+  position: absolute;
+  top: 250px;
+  left: 0px;
+  width: 300px;
+  height: 250px;
+  background: url("../images/brodie.gif");
+  -webkit-animation-name: fadeinout;
+  -moz-animation-name: fadeinout;
+  animation-name: fadeinout;
+  -webkit-animation-duration: 1s;
+  -moz-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-timing-function: ease;
+  -moz-animation-timing-function: ease;
+  animation-timing-function: ease;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+#assembly .firegun {
+  position: absolute;
+  top: 231px;
+  left: 242px;
+  width: 212px;
+  height: 180px;
+  background: url("../images/firegun.gif");
 }
 #outsideday {
   position: absolute;
@@ -643,7 +671,7 @@ a:hover {
 }
 #broroom .bro {
   left: 88px;
-  top: 286px;
+  top: 279px;
 }
 #broroom .yourbroim {
   left: 468px;
@@ -660,6 +688,154 @@ a:hover {
 #broroom .scythe {
   left: 338px;
   top: 355px;
+}
+#showcredits {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  padding-top: 100px;
+  text-align: center;
+}
+#showcredits a {
+  background: none;
+  text-shadow: none;
+  box-shadow: none;
+  color: #78afed;
+  text-decoration: underline;
+  padding: 0;
+}
+@-moz-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+@-o-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+@-ms-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+@-moz-keyframes fromtop {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 0 -459px;
+  }
+}
+@-webkit-keyframes fromtop {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 0 -459px;
+  }
+}
+@-o-keyframes fromtop {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 0 -459px;
+  }
+}
+@-ms-keyframes fromtop {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 0 -459px;
+  }
+}
+@keyframes fromtop {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 0 -459px;
+  }
 }
 @-moz-keyframes bounce {
   0% {

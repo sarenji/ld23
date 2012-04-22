@@ -154,7 +154,17 @@ a:hover {
   background: url(../images/stars.gif) repeat;
 }
 
-@-webkit-keyframes fromtop {
+@keyframes fadeinout
+  0%
+    opacity 0
+  40%
+    opacity 1
+  60%
+    opacity 1
+  100%
+    opacity 0
+
+@keyframes fromtop {
   0% {
     background-position: 0% 0%;
   }
@@ -240,8 +250,8 @@ a:hover {
 
 .bro
   position absolute
-  width 235px
-  height 120px
+  width 227px
+  height 133px
   background url(../images/bro.gif)
 
 .yourbroim
@@ -264,9 +274,17 @@ a:hover {
 
 .bullet
   position absolute
-  background url(../images/bullet.gif)
-  width 13px
-  height 15px
+  background url(../images/bullet.gif) center center no-repeat
+  width 30px
+  height 30px
+
+.telescope
+  position absolute
+  background url(../images/telescope.gif)
+  width 103px
+  height 88px
+  left 415px
+  top  211px
 
 .scythe
   position absolute
@@ -436,6 +454,7 @@ a:hover {
 #assembly
   background url(../images/assembly.gif)
   stretch()
+  overflow hidden
   .south
     top 357px
     left 258px
@@ -457,6 +476,21 @@ a:hover {
   .stairs
     left 98px
     top  309px
+  .brodie
+    position absolute
+    top 250px
+    left 0px
+    width 300px
+    height 250px
+    background url(../images/brodie.gif)
+    animate fadeinout, 1s, ease
+  .firegun
+    position absolute
+    top 231px
+    left 242px
+    width 212px
+    height 180px
+    background url(../images/firegun.gif)
 
 #outsideday
   stretch()
@@ -534,7 +568,7 @@ a:hover {
   background url(../images/broroom.gif)
   .bro
     left 88px
-    top 286px
+    top 279px
   .yourbroim
     left 468px
     top 152px
@@ -547,3 +581,16 @@ a:hover {
   .scythe
     left 338px
     top  355px
+
+#showcredits
+  stretch()
+  background black
+  padding-top 100px
+  text-align center
+  a
+    background none
+    text-shadow none
+    box-shadow none
+    color #78afed
+    text-decoration underline
+    padding 0

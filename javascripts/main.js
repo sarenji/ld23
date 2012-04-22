@@ -1,5 +1,5 @@
 (function() {
-  var $content, $document, $message, assembly, beginPlaying, broRoom, choice, colorize, control, corridor, debug, doorOutside, enterName, find, fireGunAtSwitch, game, goOutside, hide, hideMessage, introYourRoom, kitchen, message, outsideFakeSun, outsideNight, play1, play2, preloadImage, scene1, show, state, swap, toLoad, turnOnLights,
+  var $content, $document, $message, assembly, beginPlaying, broRoom, choice, colorize, control, corridor, debug, doorOutside, endGame, enterName, find, fireGunAtSwitch, game, goOutside, hide, hideMessage, introYourRoom, kitchen, message, outsideFakeSun, outsideNight, play1, play2, preloadImage, scene1, show, showCredits, state, swap, toLoad, turnOnLights,
     __slice = Array.prototype.slice;
 
   $document = $(document);
@@ -57,7 +57,7 @@
     for (i = 0, _len = messages.length; i < _len; i++) {
       msg = messages[i];
       msg = msg.replace(/^(LL: .*)/, '<span class="ll">$1</span>');
-      msg = msg.replace(/^(Steve: .*)/, '<span class="gq">$1</span>');
+      msg = msg.replace(/^(STEVE: .*)/, '<span class="gq">$1</span>');
       msg = msg.replace(/^(GQ: .*)/, '<span class="gq">$1</span>');
       messages[i] = msg;
     }
@@ -144,7 +144,7 @@
     var $play;
     $play = show('play1');
     message("This is you! You're a pretty handsome dude :)");
-    return $document.on('messageend', function() {
+    return $document.one('messageend', function() {
       return enterName();
     });
   };
@@ -376,7 +376,7 @@
     } else if (state.sinkHasStairs && ([null, "butcher knife", "gun", "hammer"].indexOf(state.kind) >= 0)) {
       msg = "Take the " + (kind.toUpperCase()) + "?";
       if (state.kind != null) {
-        msg = "Switch your " + state.kind + " with the " + kind + "?";
+        msg = "Switch your " + (state.kind.toUpperCase()) + " with the " + (kind.toUpperCase()) + "?";
       }
       return choice(msg, function() {
         state.kind = kind;
@@ -386,9 +386,9 @@
           case "hammer":
             return message("You take the HAMMER. Iiiiiiiiittt's not a dumb meme time.");
           case "gun":
-            return message("You take the GUN and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone.");
+            return message("You take the UNLOADED GUN and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone.");
           case "butcher knife":
-            return message("You used to help your mother with cooking, back when she was pregnant with your bro. Unfortunately you slipped and fell while holding the knife, and we had a dinner of blood.");
+            return message("You used to help your FATHER with cooking, back when your mother was pregnant with your bro. You slipped and fell while holding the knife and there was too much blood and... Well, your father's not around anymore.");
         }
       });
     } else if (!state.sinkHasStairs) {
@@ -447,6 +447,10 @@
       return kitchen();
     });
     $scene.on('click', '.momswitch', function() {
+      if (state.telescope) {
+        message("You don't want anything to do with this switch anymore.");
+        return;
+      }
       switch (state.kind) {
         case "hammer":
           return message("You slam the hammer as hard as possible on the switch. Nothing happens.");
@@ -454,6 +458,7 @@
           return message("You try to pry the switch off the wall. The switch stays solidly against the wall.");
         case "gun":
           if (state.hasBullet) {
+            hide('assembly');
             return fireGunAtSwitch();
           } else {
             return message("The gun chamber is empty. You stand there with your gun raised, trying to look macho like Stallone.");
@@ -462,13 +467,22 @@
         case "butcher knife":
           return message("You hack at the switch. It wasn't very effective...");
         default:
-          return message("This is the emergency switch your mother installed in case there ever was a time we needed her. Except you could never figure out how to press it.");
+          return message("This is the emergency switch your mother installed in case there ever was a time we needed her. Except nothing you try can ever move the switch. Maybe if you had a high-impact weapon...");
       }
     });
     $scene.on('click', '.assemblyswitch', function() {
       var modifier;
       if (state.assemblySwitchOn) {
-        return message("Bluuhhhh. You have no idea how to turn it back off. You need something to reach around the switch and pull it down. A pyrrhic victory indeed.");
+        if (state.kind === 'scythe') {
+          return choice("Use the SCYTHE to pull down the switch?", function() {
+            message("You use the scythe to flip the switch off! Thank Godelius.");
+            return state.assemblySwitchOn = false;
+          });
+        } else {
+          return message("Bluuhhhh. You have no idea how to turn it back off. You need something to reach around the switch and pull it down.");
+        }
+      } else if (state.telescope) {
+        return message("You are never flipping this switch on again.");
       } else if (state.kind === 'gun') {
         return choice("Do you ACTUALLY want to poke the switch up with the GUN? You don't even know how you're turning the switch back off!", function() {
           message("You flip the switch. There is a shuddering boom.\n\nSo young, and the gates of hell have already opened for you.");
@@ -498,7 +512,7 @@
         if (state.kind) {
           return message("You are already carrying something! Come on, get with the physics here.");
         } else {
-          return choice("Do you want to take the STAIRS?", function() {
+          return choice("Take the STAIRS?", function() {
             message("You take the STAIRS. They're hollow inside like your mother's heart, and dark like hers too.");
             state.tookStairs = true;
             state.kind = "stairs";
@@ -545,8 +559,14 @@
     $scene.on('click', '.generator', function() {
       return message("It's too dark to see, but this is where the generator for the switch assembly line is.");
     });
-    return $scene.on('click', '.stars', function() {
-      return message("You think you can make out Godelius Quantide and Leland L., the constellations you and your bro based your internet handles after.");
+    $scene.on('click', '.stars', function() {
+      return message("You think you can make out Godelius Quantide and Leland L., the constellations you and your bro based your internet handles after. You'd be able to tell if you could find the switch for your TELESCOPE.");
+    });
+    return $scene.on('click', '.telescope', function() {
+      return choice("Look through the TELESCOPE?", function() {
+        hide('outsidenight');
+        return endGame();
+      });
     });
   };
 
@@ -560,7 +580,7 @@
     $scene.on('click', '.you', function() {
       return message("Sometimes you and your bro like to frolick across this field like idiotic tools. After your bro began discovering his hacker interests, not so much anymore.");
     });
-    $scene.on('click', '.sky', function() {
+    $scene.on('click', '.sky, .telescope', function() {
       return message("The generator's artificial sun emits such a bright light that you can't see the stars.");
     });
     $scene.on('click', '.generator', function() {
@@ -609,7 +629,7 @@
     $scene.on('click', '.bro', function() {
       if (!state.sawBro) {
         state.sawBro = true;
-        message("Steve: oh god\nSteve: oh god\nSteve: this cant be possible\nSteve: tell me youre just having another one of your revelations\nSteve: bro?\nSteve: jon?\nSteve: OH SHIT");
+        message("STEVE: oh god\nSTEVE: oh god\nSTEVE: this cant be possible\nSTEVE: tell me youre just having another one of your revelations\nSTEVE: bro?\nSTEVE: jon?\nSTEVE: OH SHIT");
         return $document.one('messageend', function() {
           return $scene.find('.yourbroim').removeClass('hidden');
         });
@@ -618,7 +638,7 @@
       }
     });
     $scene.on('click', '.yourbroim', function() {
-      message("LL: Hey, Steve, I'm hoping you're in my room by now.\nLL: what?????????\nLL: wait hold on let me switch usernames\n* LL is now known as GQ!\nGQ: ok what the noggin????????\nGQ: how are you talking to me?????????\nLL: Sorry, I should've told you beforehand.\nGQ: yeah well!!!!!!!!!!!!!!!!\nLL: Uh, are you okay?\nGQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!\nLL: Uh, all right.\nLL: So, I finished my dimensional warper. I'm actually typing to you twenty hours in the future. I'll save YOU the fine nitty gritty, though.\nLL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.\nGQ: man this is fucked up!!!!!\nGQ: you talking to me in the future with your dead body right next to me\nGQ: i can feel its dead eyes boring into me like a knife-gripping clown about to have the last laugh\nLL: Uh.\nLL: You see a dead body? My dead body, in particular?\nLL: Are you just saying that ironically?\nGQ: i see your body here as unironically plain as day!!!!!!\nGQ: it is so unironic that i am using freaked out exclamation marks like this ok!!!!!!\nGQ: this whole thing is creeping me out more than that episode of jersey shore lovingly remastered in maximum jpeg compression!!!!!!\nLL: I'm dead?\nGQ: yes you got it! youre a regular sherlock bro!!!!!!!!\nLL: Okay.\nLL: That's odd.\nLL: I'll be back in a jiffy to check it out. Just sit tight before you go insane any further.\nGQ: n\n* LL signed off.\nGQ: o\nGQ: no\nGQ: wait\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: oh fuck!!!!!!!!!!\n* LL is offline and did not receive your message!");
+      message("LL: Hey, Steve.\nLL: I'm hoping you're in my room by now. It's been well past two minutes.\nLL: what?????????\nLL: wait hold on switching usernames\n* LL is now known as GQ!\nGQ: ok what the noggin????????\nGQ: how are you talking to me?????????\nLL: Sorry, I should've let you know beforehand.\nGQ: yeah well um!!!!!!!!!!!!!!!! yeah!!!!!!!!!!\nLL: Uh, are you okay?\nGQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!\nLL: Uh, all right.\nLL: So, I finished my dimensional warper. I'm actually typing to you twenty hours in the future. I'll save YOU the fine nitty gritty, though.\nLL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.\nGQ: man this is fucked up!!!!!\nGQ: you talking to me in the future with your dead body right next to me\nGQ: i can feel its dead eyes boring into me like a knife-wielding clown about to have the last laugh\nLL: Uh.\nLL: You see a dead body? My dead body, in particular?\nLL: Are you just saying that ironically?\nGQ: i see your body here as unironically plain as day!!!!!!\nGQ: it is so unironic that i am using tricked out exclamation marks like this ok!!!!!!\nGQ: this whole thing is creeping me out more than that episode of jersey shore lovingly remastered in maximum jpeg compression!!!!!!\nLL: Wait, I'm dead?\nGQ: yes you got it! youre a regular sherlock bro!!!!!!!!\nLL: Okay.\nLL: That's odd.\nLL: I'll be back in a jiffy to check it out. Just sit tight before you go insane any further.\nGQ: n\n* LL signed off.\nGQ: o\nGQ: no\nGQ: wait\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: oh fuck!!!!!!!!!!\n* LL is offline and did not receive your message!");
       return $(this).remove();
     });
     return $scene.on('click', '.scythe', function() {
@@ -644,34 +664,95 @@
 
   fireGunAtSwitch = function() {
     var $scene;
-    $scene = find('assembly');
-    message("You fire the gun at the switch. Your BRO appears out of nowhere! Oh bollocks! The bullet bores into his forehead. Blood spatters. He's knocked backward into the blood-stained switch, which triggers.\n\nSuddenly your BRO vanishes again a few minutes into the past, in the location he originally wanted.\n\nYou hear a rumbling outside.");
-    return state.telescope = true;
+    $scene = show('assembly');
+    $scene.find('.south').addClass('hidden');
+    $scene.find('.firegun').removeClass('hidden');
+    return setTimeout(function() {
+      $scene.find('.brodie').removeClass('hidden');
+      return setTimeout(function() {
+        $scene.find('.brodie').remove();
+        message("You hear a rumbling outside as your brother's death triggers the switch.");
+        return $document.one('messageend', function() {
+          message("ohgodohgodohgod you just killed your brother ohgodohgodohgod why cant you stop smiling ohgodohgodohgod");
+          return $document.one('messageend', function() {
+            $scene.find('.firegun').remove();
+            state.telescope = true;
+            $('.telescope').removeClass('hidden');
+            $scene.find('.south').removeClass('hidden');
+            hide('assembly');
+            return assembly();
+          });
+        });
+      }, 1000);
+    }, 2000);
   };
 
-  game = assembly;
+  endGame = function() {
+    var $scene;
+    $scene = show('endscene');
+    message("You look through the telescope.");
+    return $document.one('messageend', function() {
+      message("The stars... You feel a rush of power just as you feel small.");
+      return $document.one('messageend', function() {
+        message("STEVE: wait\nSTEVE: what is that");
+        return $document.one('messageend', function() {
+          message("STEVE: oh no\nSTEVE: is that");
+          return $document.one('messageend', function() {
+            $scene.find('.monster').removeClass('hidden');
+            message("STEVE: dad?");
+            return $document.one('messageend', function() {
+              hide('endscene');
+              return showCredits();
+            });
+          });
+        });
+      });
+    });
+  };
+
+  showCredits = function() {
+    var $scene;
+    return $scene = show('showcredits');
+  };
+
+  game = play1;
 
   $(function() {
     preloadImage('images/assembly.gif');
+    preloadImage('images/bro.gif');
+    preloadImage('images/brodie.gif');
+    preloadImage('images/broroom.gif');
+    preloadImage('images/bullet.gif');
+    preloadImage('images/butcher.gif');
     preloadImage('images/corridor.gif');
     preloadImage('images/dooroutside.gif');
     preloadImage('images/earth.gif');
+    preloadImage('images/firegun.gif');
     preloadImage('images/ggcomp.gif');
     preloadImage('images/gghouse.gif');
+    preloadImage('images/gun.gif');
+    preloadImage('images/hammer.gif');
     preloadImage('images/kitchen.gif');
     preloadImage('images/llim.gif');
     preloadImage('images/meteor.gif');
     preloadImage('images/monster.gif');
     preloadImage('images/monsterworld.gif');
+    preloadImage('images/planks.gif');
     preloadImage('images/scene1.gif');
-    preloadImage('images/stars.gif');
+    preloadImage('images/scythe.gif');
+    preloadImage('images/sinkstairs.gif');
     preloadImage('images/stairs.gif');
+    preloadImage('images/stars.gif');
+    preloadImage('images/switchdetail.gif');
+    preloadImage('images/telescope.gif');
     preloadImage('images/tentacles.gif');
     preloadImage('images/tinyworld.gif');
     preloadImage('images/tinyworldwhole.gif');
     preloadImage('images/u.gif');
     preloadImage('images/underside.gif');
+    preloadImage('images/undersideday.gif');
     preloadImage('images/usmall.gif');
+    preloadImage('images/woosh.png');
     preloadImage('images/you.gif');
     preloadImage('images/yourroom.gif');
     preloadImage('images/yourroombright.gif');
