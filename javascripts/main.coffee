@@ -29,12 +29,23 @@ hide = (id) ->
 find = (id) ->
   $("##{id}")
 
+choice = (text, okCallback, noCallback) ->
+  $choices = show 'choices'
+  $choices.find('.text').text(text)
+  $choices.on 'click', '.ok', ->
+    hide 'choices'
+    okCallback()
+  $choices.on 'click', '.no', ->
+    hide 'choices'
+    noCallback()
+
 # MESSAGES
 
 colorize = (message) ->
   messages = message.split('\n')
   for msg, i in messages
     msg = msg.replace(/^(LL: .*)/, '<span class="ll">$1</span>')
+    msg = msg.replace(/^(Steve: .*)/, '<span class="gq">$1</span>')
     msg = msg.replace(/^(GQ: .*)/, '<span class="gq">$1</span>')
     messages[i] = msg
   messages.join '\n'
@@ -105,7 +116,6 @@ play1 = ->
 
 introYourRoom = ->
   $scene = show 'scene1'
-  # TODO: Make room
   message """
   This is your room. It's a bit dark right now, even if it means getting around is a little harder.
   """
@@ -301,11 +311,13 @@ corridor = ->
     You, uh... would really rather not. Your mother loves her games.
     """
   $scene.on 'click', '.west', ->
-    message """
-    Your bro's door is locked! You need to flip a switch somewhere.
-
-    How does your mother stay so consistent with her games?
-    """
+    if !state.outsideSwitchOn
+      message """
+      Your bro's door is locked! You need to flip a switch somewhere.
+      """
+    else
+      hide 'scene2'
+      broRoom()
   $scene.on 'click', '.north', ->
     hide 'scene2'
     kitchen()
@@ -328,26 +340,20 @@ kitchen = ->
     corridor()
   $scene.on 'click', '.sink', ->
     if state.kind == "stairs"
-      # TODO: Display "Put stairs here?" choice
-      # TODO: Show stairs
-      message """
-      You put the stairs in front of the sink.
-      """
-      state.sinkHasStairs = true
-      state.kind = null
+      choice "Put STAIRS in front of the sink?", ->
+        $scene.find('.stairs').removeClass 'hidden'
+        state.sinkHasStairs = true
+        state.kind = null
     else if state.sinkHasStairs
       if state.kind?
         message """
         You may be insanely handsome, but you don't have the upper strength to carry two things.
         """
       else
-        # TODO: Display "Take stairs?" choice
-        # TODO: Show stairs
-        message """
-        You take the steppy-up-and-down-thing.
-        """
-        state.sinkHasStairs = false
-        state.kind = "stairs"
+        choice "Take STAIRS?", ->
+          $scene.find('.stairs').addClass 'hidden'
+          state.sinkHasStairs = false
+          state.kind = "stairs"
     else
       message """
       This is where you wash your own dishes. You're not really sure where the water comes from.
@@ -357,32 +363,35 @@ kitchen = ->
   $scene.on 'click', '.gun', ->
     swap.call(this, "gun")
   $scene.on 'click', '.butcher', ->
-    swap.call(this, "butcher")
+    swap.call(this, "butcher knife")
   $scene.on 'click', '.u', ->
     message """
     You are TOO handsome! Hehehehe.
     """
 
 swap = (kind) ->
+  $kind = $(this)
   if state.sinkHasStairs and state.kind == kind
     message """You put back the #{kind} like a nice boy."""
     state.kind = null
-    $(this).css 'opacity', 1
-  else if state.sinkHasStairs and ([null, "butcher", "gun", "hammer"].indexOf(state.kind) >= 0)
-    # TODO: Display "Switch with?" choice
-    state.kind = kind
-    find('kitchen').find('.butcher, .gun, .hammer').css 'opacity', 1
-    $(this).css 'opacity', .2
-    switch kind
-      when "hammer"
-        message "You take the hammer. Iiiiiiiiittt's not a dumb meme time."
-      when "gun"
-        message "You take the gun and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone."
-      when "butcher"
-        message "You used to help your mother with cooking, back when she was pregnant with your bro. Unfortunately you slipped and fell while holding the knife, and the sharp edge sliced your mother in the eye."
+    $kind.css 'opacity', 1
+  else if state.sinkHasStairs and ([null, "butcher knife", "gun", "hammer"].indexOf(state.kind) >= 0)
+    msg = "Take the #{kind.toUpperCase()}?"
+    if state.kind? then msg = "Switch your #{state.kind} with the #{kind}?"
+    choice msg, ->
+      state.kind = kind
+      find('kitchen').find('.butcher, .gun, .hammer').css 'opacity', 1
+      $kind.css 'opacity', .2
+      switch kind
+        when "hammer"
+          message "You take the HAMMER. Iiiiiiiiittt's not a dumb meme time."
+        when "gun"
+          message "You take the GUN and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone."
+        when "butcher knife"
+          message "You used to help your mother with cooking, back when she was pregnant with your bro. Unfortunately you slipped and fell while holding the knife, and we had a dinner of blood."
   else if !state.sinkHasStairs
     message """
-    You're too short to reach. You may be incredibly handsome, but you are still short.
+    You're too short to reach this #{kind.toUpperCase()}. You may be incredibly handsome, but you are still short.
     """
 
 
@@ -398,6 +407,7 @@ doorOutside = ->
     hide 'dooroutside'
     kitchen()
   $scene.on 'click', '.planks', ->
+    $planks = $(this)
     if state.priedPlanks
       hide 'dooroutside'
       goOutside()
@@ -409,13 +419,13 @@ doorOutside = ->
       switch state.kind
         when "stairs"
           message "You slam the stairs against the planks. The stairs get a little bent."
-        when "butcher"
+        when "butcher knife"
           message "You attack the planks with the butcher knife and look like an idiot in doing so."
         when "gun"
-          message "You shoot the planks. Or, you would have if the gun wasn't empty of bullets."
+          message "You shoot the planks. Or, you would have if the gun were loaded."
         when "hammer"
           message "You pry the planks out of their foundation. Light filters through the now-open window!"
-          # TODO: Remove planks/replace BG
+          $planks.css 'opacity', 0
           state.priedPlanks = true
   $scene.on 'click', '.door', ->
     message """
@@ -440,53 +450,61 @@ assembly = ->
         message """
         You slam the hammer as hard as possible on the switch. Nothing happens.
         """
-      when "sickle"
+      when "scythe"
         message """
         You try to pry the switch off the wall. The switch stays solidly against the wall.
         """
       when "gun"
-        message """
-        The gun chamber is empty. You stand there with your gun raised, trying to look macho like Stallone.
-        """
-      when "butcher"
+        if state.hasBullet
+          fireGunAtSwitch()
+        else
+          message """
+          The gun chamber is empty. You stand there with your gun raised, trying to look macho like Stallone.
+          """
+      when "butcher knife"
         message """
         You hack at the switch. It wasn't very effective...
         """
       else
         message """
-        This is the emergency switch your mother installed in case there ever was a time we needed her. Except you could never figure out how to press it. You needed to five years ago, but that's a story you'd rather not tell.
+        This is the emergency switch your mother installed in case there ever was a time we needed her. Except you could never figure out how to press it.
         """
 
   $scene.on 'click', '.assemblyswitch', ->
-    if state.kind == 'gun'
-      # TODO: Choice, with a really angry Karkat thing?
-      message """
-      You flip the switch. There is a shuddering boom.
+    if state.assemblySwitchOn
+      # TODO scythe
+      message "Bluuhhhh. You have no idea how to turn it back off. You need something to reach around the switch and pull it down. A pyrrhic victory indeed."
+    else if state.kind == 'gun'
+      choice "Do you ACTUALLY want to poke the switch up with the GUN? You don't even know how you're turning the switch back off!", ->
+        message """
+        You flip the switch. There is a shuddering boom.
 
-      So young, and the gates of hell have already opened for you.
-      """
+        So young, and the gates of hell have already opened for you.
+        """
+        state.assemblySwitchOn = true
     else
-      modifier = if state.kind? and state.kind != "stairs" then " with your #{state.kind}" else ""
+      modifier = if state.kind? and state.kind != "stairs" then " with your #{state.kind.toUpperCase()}" else ""
       message """
-      You can't reach the switch#{modifier}! Why would you ever want to flip the assembly line switch back on anyway???
+      You can't reach the switch#{modifier}. Why would you ever want to flip the assembly line switch back on anyway???
       """
   $scene.on 'click', '.stairs', ->
+    $stairs = $(this)
     if state.tookStairs
       if state.kind == "stairs"
         message """
-        You put back the stairs.
+        You put back the STAIRS.
         """
         $scene.find('.putbackstairs').removeClass('hidden')
-        $(this).css('opacity', 1)
+        $stairs.css('opacity', 1)
         state.tookStairs = false
         state.kind = null
       else if state.kind?
         message """
-        A #{state.kind} is not stairs.
+        A #{state.kind.toUpperCase()} cannot replace STAIRS.
         """
       else
         message """
-        You have no stairs to put back. Although your bro can be a little walkover sometimes...
+        You have no STAIRS to put back. Although your bro can be a little walkover sometimes...
         """
     else
       if state.kind
@@ -494,12 +512,13 @@ assembly = ->
         You are already carrying something! Come on, get with the physics here.
         """
       else
-        message """
-        You take the stairs. They're hollow inside like your mother's heart, and dark like hers too.
-        """
-        state.tookStairs = true
-        state.kind = "stairs"
-        $(this).css('opacity', .2)
+        choice "Do you want to take the STAIRS?", ->
+          message """
+          You take the STAIRS. They're hollow inside like your mother's heart, and dark like hers too.
+          """
+          state.tookStairs = true
+          state.kind = "stairs"
+          $stairs.css('opacity', .2)
 
 
 goOutside = ->
@@ -509,7 +528,8 @@ goOutside = ->
     doorOutside()
   $scene.on 'click', '.south', ->
     hide 'outsideday'
-    outsideNight()
+    if state.assemblySwitchOn then outsideFakeSun()
+    else                           outsideNight()
   $scene.on 'click', '.u', ->
     message "Rawr ;-)"
   $scene.on 'click', '.sky', ->
@@ -538,10 +558,12 @@ outsideFakeSun = ->
   $scene.on 'click', '.north', ->
     hide 'outsidefakesun'
     goOutside()
+  $scene.on 'click', '.you', ->
+    message "Sometimes you and your bro like to frolick across this field like idiotic tools. After your bro began discovering his hacker interests, not so much anymore."
   $scene.on 'click', '.sky', ->
     message "The generator's artificial sun emits such a bright light that you can't see the stars."
   $scene.on 'click', '.generator', ->
-    message "The generator. It's a monstrous monster of a machine that powers the switch assembly line. Oh man, you are totally going to hell for turning it on."
+    message "The generator. It's a monstrous monster of a machine that powers the switch assembly line."
   $scene.on 'click', '.switch', ->
     $(this).toggleClass('on')
     if !state.sawDetailedSwitch
@@ -557,11 +579,11 @@ outsideFakeSun = ->
       $document.one 'messageend', ->
         $scene.find('.switchdetail').removeClass('hidden')
         message """
-        * You began instant messaging LL!
+        * You began instant messaging LL on your phone!
         GQ: ok, wow
         GQ: can you believe this
         GQ: mom wired a switch through the fuckin planet out onto the other side
-        GQ: this is mad dedication right here ok
+        GQ: this is mad dedication ok
         GQ: i think im forced to admit that this is some impressive shenanigans right here
         GQ: are you there
         * LL is offline and did not receive your message!
@@ -588,10 +610,118 @@ outsideFakeSun = ->
       """
       state.outsideSwitchOn = !state.outsideSwitchOn
 
+broRoom = ->
+  $scene = show 'broroom'
+  if !state.visitedBroRoom
+    state.visitedBroRoom = true
+    message """
+    This is your younger bro's room. It's full of hacker gobbledygook. Your bro tried explaining it to you one time, but it sounded like he had a strained anus. You made the mistake of saying that out loud, and he hasn't explained any of his hacker doohickeys to you since.
+
+    Which is too bad, because you secretly enjoy hearing them.
+    """
+  $scene.on 'click', '.bullet', ->
+    # TODO: Check for `kind`
+    $bullet = $(this)
+    choice "Take POORLY DRAWN, INFINITELY FIREABLE BULLET?", ->
+      # TODO: turn bullet into a `kind`.
+      message "You put the bullet in your pocket."
+      $bullet.remove()
+      state.hasBullet = true
+  $scene.on 'click', '.east', ->
+    hide 'broroom'
+    corridor()
+  $scene.on 'click', '.bro', ->
+    if !state.sawBro
+      state.sawBro = true
+      # TODO: Show image
+      message """
+      Steve: oh god
+      Steve: oh god
+      Steve: this cant be possible
+      Steve: tell me youre just having another one of your revelations
+      Steve: bro?
+      Steve: jon?
+      Steve: OH SHIT
+      """
+      $document.one 'messageend', ->
+        $scene.find('.yourbroim').removeClass 'hidden'
+    else
+      message "Your brother's dead body. Oh god!!!!!!!!"
+  $scene.on 'click', '.yourbroim', ->
+    # TODO show image
+    message """
+    LL: Hey, Steve, I'm hoping you're in my room by now.
+    LL: what?????????
+    LL: wait hold on let me switch usernames
+    * LL is now known as GQ!
+    GQ: ok what the noggin????????
+    GQ: how are you talking to me?????????
+    LL: Sorry, I should've told you beforehand.
+    GQ: yeah well!!!!!!!!!!!!!!!!
+    LL: Uh, are you okay?
+    GQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!
+    LL: Uh, all right.
+    LL: So, I finished my dimensional warper. I'm actually typing to you twenty hours in the future. I'll save YOU the fine nitty gritty, though.
+    LL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.
+    GQ: man this is fucked up!!!!!
+    GQ: you talking to me in the future with your dead body right next to me
+    GQ: i can feel its dead eyes boring into me like a knife-gripping clown about to have the last laugh
+    LL: Uh.
+    LL: You see a dead body? My dead body, in particular?
+    LL: Are you just saying that ironically?
+    GQ: i see your body here as unironically plain as day!!!!!!
+    GQ: it is so unironic that i am using freaked out exclamation marks like this ok!!!!!!
+    GQ: this whole thing is creeping me out more than that episode of jersey shore lovingly remastered in maximum jpeg compression!!!!!!
+    LL: I'm dead?
+    GQ: yes you got it! youre a regular sherlock bro!!!!!!!!
+    LL: Okay.
+    LL: That's odd.
+    LL: I'll be back in a jiffy to check it out. Just sit tight before you go insane any further.
+    GQ: n
+    * LL signed off.
+    GQ: o
+    GQ: no
+    GQ: wait
+    * LL is offline and did not receive your message!
+    * LL is offline and did not receive your message!
+    * LL is offline and did not receive your message!
+    GQ: oh fuck!!!!!!!!!!
+    * LL is offline and did not receive your message!
+    """
+    $(this).remove()
+  $scene.on 'click', '.scythe', ->
+    $scythe = $(this)
+    if !state.kind?
+      choice "Take BRO'S SCYTHE?", ->
+        state.kind = "scythe"
+        $scythe.css 'opacity', .2
+        message "You take your brother's prized scythe.
+
+        You feel kinda like the reaper of death, all things considering."
+    else if state.kind == 'scythe'
+      choice "Put back BRO'S SCYTHE?", ->
+        state.kind = null
+        $scythe.css 'opacity', 1
+        message "You put back the scythe like a nice boy."
+    else
+      message "You're already carrying something! You can't take his scythe, brah."
 # Possible TODO: Add "choice" to bro's room to knock; if so, get a cool conversation :)
 
+fireGunAtSwitch = ->
+  $scene = find 'assembly'
+  # TODO cutscene!!!!
+  message """
+  You fire the gun at the switch. Your BRO appears out of nowhere! Oh bollocks! The bullet bores into his forehead. Blood spatters. He's knocked backward into the blood-stained switch, which triggers.
+
+  Suddenly your BRO vanishes again a few minutes into the past, in the location he originally wanted.
+
+  You hear a rumbling outside.
+  """
+  state.telescope = true
+
+
 # game is the first function called after load
-game = outsideFakeSun
+game = assembly
 
 # preload images (do after game declaration)
 $ ->

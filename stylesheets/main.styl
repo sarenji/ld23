@@ -31,6 +31,7 @@ animate(name, duration, timing = linear, iteration = infinite)
 html {
   background: black;
   color: white;
+  overflow-y: scroll;
 }
 
 body {
@@ -73,10 +74,12 @@ h1 {
   color #333
   background #ddd
   padding: 14px;
+  border-bottom: 20px solid #1A1D1F; // hack
 }
 
 #messagehitbox
   stretch()
+  position fixed
   z-index 1
 
 #continue {
@@ -106,14 +109,14 @@ p {
   border: none;
 }
 
-.choices {
+#choices, .choices {
   text-align: center;
   margin-top: 100px
   background rgba(0, 0, 0, .5)
   stretch(top: auto)
 }
 
-.choices p {
+#choices p, .choices p {
   text-shadow: 2px 2px 0 #333;
 }
 
@@ -235,6 +238,18 @@ a:hover {
   stretch()
   background url(../images/monsterworld.gif)
 
+.bro
+  position absolute
+  width 235px
+  height 120px
+  background url(../images/bro.gif)
+
+.yourbroim
+  position absolute
+  width 66px
+  height 75px
+  background url(../images/llim.gif) no-repeat top left
+
 .u
   position absolute
   width 95px
@@ -246,6 +261,18 @@ a:hover {
     width 48px
     height 91px
     background url(../images/usmall.gif) no-repeat
+
+.bullet
+  position absolute
+  background url(../images/bullet.gif)
+  width 13px
+  height 15px
+
+.scythe
+  position absolute
+  background url(../images/scythe.gif)
+  width 130px
+  height 83px
 
 #play1
   stretch()
@@ -262,12 +289,8 @@ a:hover {
 
 #scene1
   .yourbroim
-    position absolute
     top 200px
     left 440px
-    width 66px
-    height 75px
-    background url(../images/llim.gif) no-repeat top left
   .lightswitch
     position absolute
     top 0
@@ -357,32 +380,38 @@ a:hover {
     top  254px
   .sink
     position absolute
-    top 240px
+    top 220px
     left 0
     width 313px
-    height 133px
-    background rgba(230, 230, 230, .5)
+    height 160px
+  .stairs
+    position absolute
+    background url(../images/sinkstairs.gif)
+    width 162px
+    height 116px
+    left 103px
+    top 283px
   .butcher
     position absolute
-    top 140px
-    left 40px
-    width 20px
-    height 40px
-    background rgba(230, 230, 230, .5)
+    top 62px
+    left 239px
+    width 43px
+    height 135px
+    background url(../images/butcher.gif)
   .gun
     position absolute
-    top 140px
-    left 70px
-    width 20px
-    height 40px
-    background rgba(230, 230, 230, .5)
+    top 11px
+    left 77px
+    width 54px
+    height 210px
+    background url(../images/gun.gif)
   .hammer
     position absolute
-    top 140px
-    left 100px
-    width 20px
-    height 40px
-    background rgba(230, 230, 230, .5)
+    top 101px
+    left 151px
+    width 44px
+    height 73px
+    background url(../images/hammer.gif)
 
 #dooroutside
   background: url(../images/dooroutside.gif)
@@ -392,18 +421,17 @@ a:hover {
     left 258px
   .planks
     position absolute
-    top 40px
-    left 40px
-    width 335px
-    height 300px
-    background rgba(230, 230, 230, .5)
+    top 29px
+    left 43px
+    width 343px
+    height 330px
+    background url(../images/planks.gif)
   .door
     position absolute
     left 410px
-    height 420px
+    height 460px
     width 230px
-    top 30px
-    background rgba(230, 230, 230, .5)
+    top 0
 
 #assembly
   background url(../images/assembly.gif)
@@ -420,8 +448,8 @@ a:hover {
     background rgba(230, 230, 230, .5)
   .assemblyswitch
     position absolute
-    top 166px
-    left 60px
+    top 110px
+    left 90px
     width 21px
     height 42px
     background url(../images/buttons/switchdown.gif)
@@ -460,6 +488,12 @@ a:hover {
     height 91px
     right 66px
     top 192px
+  .generator
+    position absolute
+    bottom 0
+    left 170px
+    width 260px
+    height 220px
 
 #outsidefakesun
   stretch()
@@ -495,3 +529,22 @@ a:hover {
   .switchdetail
     background url(../images/switchdetail.gif)
     stretch()
+
+#broroom
+  stretch()
+  background url(../images/broroom.gif)
+  .bro
+    left 88px
+    top 286px
+  .yourbroim
+    left 468px
+    top 152px
+  .east
+    bottom 14px
+    right 14px
+  .bullet
+    left 91px
+    top 379px
+  .scythe
+    left 338px
+    top  355px
