@@ -1,3 +1,5 @@
+# TODO: Prevent user from selecting stuff while a choice window is open.
+
 $document = $(document)
 $message = $("#message")
 $content = $("#content")
@@ -224,7 +226,7 @@ beginPlaying = ->
       Bluhhh. Turn off the lights first.
       """
     else
-      $scene.off 'click'
+      hide 'scene1'
       corridor()
   $scene.on 'click', '.doorswitch', ->
     if state.flippedLight
@@ -315,13 +317,39 @@ kitchen = ->
     """
   $scene.on 'click', '.east', ->
     hide 'kitchen'
+    doorOutside()
   $scene.on 'click', '.west', ->
     hide 'kitchen'
   $scene.on 'click', '.south', ->
     hide 'kitchen'
     corridor()
 
-# preload images
+doorOutside = ->
+  $scene = show 'dooroutside'
+  if !state.visitedDoorOutside
+    state.visitedDoorOutside = true
+    message """
+    Buuuhhh!!! You used to escape through this window (now cloaked behind a barricade of wooden planks). The window is the only un-switch-able escape hatch, and it seems your mother is intent on preventing you from ever using it again.
+
+    Maybe you should talk to your bro about this.
+    """
+  $scene.on 'click', '.south', ->
+    hide 'dooroutside'
+    kitchen()
+  $scene.on 'click', '.planks', ->
+    message """
+    You need to find something to unscrew these planks.
+    """
+  $scene.on 'click', '.door', ->
+    message """
+    Locked. There's nothing interesting outside, anyway.
+    """
+
+
+# game is the first function called after load
+game = corridor
+
+# preload images (do after game declaration)
 $ ->
   preloadImage 'images/corridor.gif'
   preloadImage 'images/earth.gif'
@@ -343,6 +371,3 @@ $ ->
   preloadImage 'images/buttons/east.gif'
   preloadImage 'images/buttons/west.gif'
   preloadImage 'images/buttons/continue.gif'
-
-# game is the first function called after load
-game = play1

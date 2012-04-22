@@ -201,6 +201,14 @@ a:hover {
   right: 0;
   bottom: 0;
 }
+#dooroutside {
+  background: url("../images/dooroutside.gif");
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 ::-webkit-scrollbar {
   width: 12px;
   background: #aaa;
@@ -375,6 +383,26 @@ a:hover {
 #kitchen .east {
   left: 524px;
   top: 62px;
+}
+#dooroutside .south {
+  top: 357px;
+  left: 258px;
+}
+#dooroutside .planks {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  width: 335px;
+  height: 300px;
+  background: rgba(230,230,230,0.50);
+}
+#dooroutside .door {
+  position: absolute;
+  left: 410px;
+  height: 420px;
+  width: 230px;
+  top: 30px;
+  background: rgba(230,230,230,0.50);
 }
 @-moz-keyframes bounce {
   0% {

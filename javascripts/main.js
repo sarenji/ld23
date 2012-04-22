@@ -1,5 +1,5 @@
 (function() {
-  var $content, $document, $message, beginPlaying, colorize, control, corridor, debug, enterName, find, game, hide, hideMessage, introYourRoom, kitchen, message, play1, play2, preloadImage, scene1, show, state, toLoad, turnOnLights,
+  var $content, $document, $message, beginPlaying, colorize, control, corridor, debug, doorOutside, enterName, find, game, hide, hideMessage, introYourRoom, kitchen, message, play1, play2, preloadImage, scene1, show, state, toLoad, turnOnLights,
     __slice = Array.prototype.slice;
 
   $document = $(document);
@@ -214,7 +214,7 @@
       } else if (state.flippedLight) {
         return message("Bluhhh. Turn off the lights first.");
       } else {
-        $scene.off('click');
+        hide('scene1');
         return corridor();
       }
     });
@@ -300,7 +300,8 @@
       message("This is your main room, which is also the kitchen. Your mom doesn't seem to be here, which is good. But then, she doesn't seem to be around a lot of the time.");
     }
     $scene.on('click', '.east', function() {
-      return hide('kitchen');
+      hide('kitchen');
+      return doorOutside();
     });
     $scene.on('click', '.west', function() {
       return hide('kitchen');
@@ -310,6 +311,27 @@
       return corridor();
     });
   };
+
+  doorOutside = function() {
+    var $scene;
+    $scene = show('dooroutside');
+    if (!state.visitedDoorOutside) {
+      state.visitedDoorOutside = true;
+      message("Buuuhhh!!! You used to escape through this window (now cloaked behind a barricade of wooden planks). The window is the only un-switch-able escape hatch, and it seems your mother is intent on preventing you from ever using it again.\n\nMaybe you should talk to your bro about this.");
+    }
+    $scene.on('click', '.south', function() {
+      hide('dooroutside');
+      return kitchen();
+    });
+    $scene.on('click', '.planks', function() {
+      return message("You need to find something to unscrew these planks.");
+    });
+    return $scene.on('click', '.door', function() {
+      return message("Locked. There's nothing interesting outside, anyway.");
+    });
+  };
+
+  game = corridor;
 
   $(function() {
     preloadImage('images/corridor.gif');
@@ -333,7 +355,5 @@
     preloadImage('images/buttons/west.gif');
     return preloadImage('images/buttons/continue.gif');
   });
-
-  game = play1;
 
 }).call(this);
