@@ -504,11 +504,10 @@ a:hover {
 }
 #assembly .momswitch {
   position: absolute;
-  top: 284px;
-  left: 53px;
-  width: 30px;
-  height: 30px;
-  background: rgba(230,230,230,0.50);
+  top: 240px;
+  left: 13px;
+  width: 110px;
+  height: 125px;
 }
 #assembly .assemblyswitch {
   position: absolute;

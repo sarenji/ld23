@@ -377,7 +377,7 @@ swap = (kind) ->
     $kind.css 'opacity', 1
   else if state.sinkHasStairs and ([null, "butcher knife", "gun", "hammer"].indexOf(state.kind) >= 0)
     msg = "Take the #{kind.toUpperCase()}?"
-    if state.kind? then msg = "Switch your #{state.kind} with the #{kind}?"
+    if state.kind? then msg = "Switch your #{state.kind.toUpperCase()} with the #{kind.toUpperCase()}?"
     choice msg, ->
       state.kind = kind
       find('kitchen').find('.butcher, .gun, .hammer').css 'opacity', 1
@@ -386,7 +386,7 @@ swap = (kind) ->
         when "hammer"
           message "You take the HAMMER. Iiiiiiiiittt's not a dumb meme time."
         when "gun"
-          message "You take the GUN and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone."
+          message "You take the UNLOADED GUN and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone."
         when "butcher knife"
           message "You used to help your mother with cooking, back when she was pregnant with your bro. Unfortunately you slipped and fell while holding the knife, and we had a dinner of blood."
   else if !state.sinkHasStairs
@@ -467,7 +467,7 @@ assembly = ->
         """
       else
         message """
-        This is the emergency switch your mother installed in case there ever was a time we needed her. Except you could never figure out how to press it.
+        This is the emergency switch your mother installed in case there ever was a time we needed her. Except nothing you try can ever move the switch. Maybe if you had a high-impact weapon...
         """
 
   $scene.on 'click', '.assemblyswitch', ->
@@ -512,7 +512,7 @@ assembly = ->
         You are already carrying something! Come on, get with the physics here.
         """
       else
-        choice "Do you want to take the STAIRS?", ->
+        choice "Take the STAIRS?", ->
           message """
           You take the STAIRS. They're hollow inside like your mother's heart, and dark like hers too.
           """
