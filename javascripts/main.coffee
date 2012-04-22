@@ -424,7 +424,7 @@ swap = (kind) ->
         when "gun"
           message "You take the UNLOADED GUN and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone."
         when "butcher knife"
-          message "You used to help your mother with cooking, while she was pregnant with your bro. You slipped and fell while holding the knife and there was too much blood and... Well, your mother has one eye."
+          message "You used to help your mother with cooking, while she was pregnant with your bro. You slipped and fell while holding the knife and there was too much blood and... Well, now your mother has one eye."
   else if !state.sinkHasStairs
     message """
     You're too short to reach this #{kind.toUpperCase()}. You may be incredibly handsome, but you are still short.
@@ -495,8 +495,9 @@ assembly = ->
         """
       when "gun"
         if state.hasBullet
-          hide 'assembly'
-          fireGunAtSwitch()
+          choice "Load the GUN with the BULLET and shoot the switch?", ->
+            hide 'assembly'
+            fireGunAtSwitch()
         else
           message """
           The gun chamber is empty. You stand there with your gun raised, trying to look macho like Stallone.
@@ -571,7 +572,7 @@ assembly = ->
       else
         choice "Take the STAIRS?", ->
           message """
-          You take the STAIRS. They're hollow inside like your mother's heart, and dark like hers too.
+          You take the STAIRS. They're light like the inside of your mother's heart, and hollow like hers too.
           """
           state.tookStairs = true
           state.kind = "stairs"
@@ -780,7 +781,9 @@ fireGunAtSwitch = ->
     $scene.find('.brodie').removeClass 'hidden'
     setTimeout ->
       $scene.find('.brodie').remove()
-      message "ohgodohgodohgod you just killed your bro ohgodohgodohgod why cant you stop smiling ohgodohgodohgod"
+      message "ohgodohgodohgod you just killed your bro ohgodohgodohgod why cant you stop smiling ohgodohgodohgod
+
+      ohgodohgodohgod you need to calm down where is your TELESCOPE ohgodohgodohgod"
       $document.one 'messageend', ->
         message "You hear a rumbling outside as your bro's future death triggers the switch."
         $document.one 'messageend', ->
