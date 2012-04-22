@@ -642,8 +642,10 @@
     $scene.on('click', '.bro', function() {
       if (!state.sawBro) {
         state.sawBro = true;
+        $scene.find('.brodeathdetail').removeClass('hidden');
         message("STEVE: oh god\nSTEVE: oh god\nSTEVE: this cant be possible\nSTEVE: tell me youre just having another one of your revelations\nSTEVE: bro?\nSTEVE: jon?\nSTEVE: OH SHIT");
         return $document.one('messageend', function() {
+          $scene.find('.brodeathdetail').addClass('hidden');
           return $scene.find('.yourbroim').removeClass('hidden');
         });
       } else {

@@ -652,7 +652,7 @@ broRoom = ->
   $scene.on 'click', '.bro', ->
     if !state.sawBro
       state.sawBro = true
-      # TODO: Show image
+      $scene.find('.brodeathdetail').removeClass 'hidden'
       message """
       STEVE: oh god
       STEVE: oh god
@@ -663,6 +663,7 @@ broRoom = ->
       STEVE: OH SHIT
       """
       $document.one 'messageend', ->
+        $scene.find('.brodeathdetail').addClass 'hidden'
         $scene.find('.yourbroim').removeClass 'hidden'
     else
       message "Your brother's dead body. Oh god!!!!!!!!"
