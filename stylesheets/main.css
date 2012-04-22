@@ -559,6 +559,9 @@ a:hover {
   bottom: 0;
   overflow: hidden;
 }
+#assembly.on {
+  background: url("../images/assemblyswitchon.gif");
+}
 #assembly .south {
   top: 357px;
   left: 258px;

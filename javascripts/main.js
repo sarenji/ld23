@@ -429,7 +429,7 @@
           case "gun":
             return message("You take the UNLOADED GUN and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone.");
           case "butcher knife":
-            return message("You used to help your FATHER with cooking, back when your mother was pregnant with your bro. You slipped and fell while holding the knife and there was too much blood and... Well, your father's not around anymore.");
+            return message("You used to help your mother with cooking, while she was pregnant with your bro. You slipped and fell while holding the knife and there was too much blood and... Well, your mother has one eye.");
         }
       });
     } else if (!state.sinkHasStairs) {
@@ -465,7 +465,7 @@
           case "gun":
             return message("You shoot the planks. Or, you would have if the gun were loaded.");
           case "hammer":
-            message("You pry the planks out of their foundation. Light filters through the now-open window!");
+            message("You pry the planks out of their foundation. You can see the grass past the open window!");
             $planks.css('opacity', 0);
             return state.priedPlanks = true;
         }
@@ -646,7 +646,7 @@
         message("You flip the switch.\n\nWait. What's this poking out below the switch?\n\n...\n\nOkay, whoa. You've simply got to tell your bro about this.");
         return $document.one('messageend', function() {
           $scene.find('.switchdetail').removeClass('hidden');
-          message("* You began instant messaging LL on your phone!\nGQ: ok, wow\nGQ: can you believe this\nGQ: mom wired a switch through the fuckin planet out onto the other side\nGQ: this is mad dedication ok\nGQ: i think im forced to admit that this is some impressive shenanigans right here\nGQ: are you there\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: alskd;jklsda;jlkf\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: ffffffffffffff\n* LL is offline and did not receive your message!\n* You ceased instant messaging LL!");
+          message("* You began instant messaging LL on your PHONE!\nGQ: ok, wow\nGQ: can you believe this\nGQ: mom wired a switch through the fuckin planet out onto the other side\nGQ: this is mad dedication ok\nGQ: i think im forced to admit that this is some impressive shenanigans right here\nGQ: are you there\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: alskd;jklsda;jlkf\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: ffffffffffffff\n* LL is offline and did not receive your message!\n* You ceased instant messaging LL!");
           state.outsideSwitchOn = true;
           state.sawDetailedSwitch = true;
           return $document.one('messageend', function() {
@@ -704,7 +704,7 @@
     });
     $scene.on('click', '.yourbroim', function() {
       $scene.find('.yousad').removeClass('hidden');
-      message("LL: Hey, Steve.\nLL: I'm hoping you're in my room by now. It's been well past two minutes.\nLL: what?????????\nLL: wait hold on switching usernames\n* LL is now known as GQ!\nGQ: ok what the noggin????????\nGQ: how are you talking to me?????????\nLL: Sorry, I should've let you know beforehand.\nGQ: yeah well um!!!!!!!!!!!!!!!! yeah!!!!!!!!!!\nLL: Uh, are you okay?\nGQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!\nLL: Uh, all right.\nLL: So, I finished my dimensional warper. I'm actually typing to you twenty hours in the future. I'll save YOU the fine nitty gritty, though.\nLL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.\nGQ: man this is fucked up!!!!!\nGQ: you talking to me in the future with your dead body lying behind me present tense\nGQ: i can feel its dead eyes boring into me like a knife-wielding clown about to have the last laugh\nLL: Uh.\nLL: You see a dead body? My dead body, in particular?\nLL: Are you just saying that ironically?\nGQ: i see your body here as unironically plain as day!!!!!!\nGQ: it is so unironic that i am using tricked out exclamation marks like this ok!!!!!!\nGQ: this whole thing is creeping me out more than that episode of jersey shore lovingly remastered in maximum jpeg compression!!!!!!\nLL: Wait, I'm dead?\nGQ: yes you got it! youre a regular sherlock bro!!!!!!!!\nLL: Okay.\nLL: That's very interesting.\nLL: I'll come check it out. Just sit tight before you go insane or whatever.\nGQ: n\n* LL signed off.\nGQ: o\nGQ: no\nGQ: wait\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: oh fuck!!!!!!!!!!\nGQ: id hope you die but you are already dead!!!!!!!!!!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!");
+      message("LL: Hey, Steve.\nLL: I'm hoping you're in my room by now. It's been well past two minutes.\nLL: what?????????\nLL: wait hold on switching usernames\n* LL is now known as GQ!\nGQ: ok what the noggin????????\nGQ: how are you talking to me?????????\nLL: Sorry, I should have told you beforehand.\nGQ: yeah well um!!!!!!!!!!!!!!!! ok!!!!!!!!!!\nLL: Uh, are you okay?\nGQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!\nLL: Uh, all right.\nLL: So, I finished my dimensional warper. I'm actually typing to you twenty hours in the future. I'll save YOU the fine nitty gritty, though.\nLL: It's a bit janky, both temporally and spatially. I'm guessing it just needs a few more minutes of calibration.\nGQ: man this is fucked up!!!!!\nGQ: you talking to me in the future with your dead body lying behind me present tense\nGQ: i can feel its dead eyes boring into me like a knife-wielding clown about to have the last laugh\nLL: Uh.\nLL: You see a dead body? My dead body, in particular?\nLL: Are you just saying that ironically?\nGQ: i see your body here as unironically plain as day!!!!!!\nGQ: it is so unironic that i am using tricked out exclamation marks like this ok!!!!!!\nGQ: this whole thing is creeping me out more than that episode of jersey shore lovingly remastered in maximum jpeg compression!!!!!!\nLL: Wait, I'm dead?\nGQ: yes you got it! youre a regular sherlock bro!!!!!!!!\nLL: Okay.\nLL: That's very interesting.\nLL: I'll come check it out. Just sit tight before you go insane or whatever.\nGQ: n\n* LL signed off.\nGQ: o\nGQ: no\nGQ: wait\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!\nGQ: oh fuck!!!!!!!!!!\nGQ: id hope you die but you are already dead!!!!!!!!!!\n* LL is offline and did not receive your message!\n* LL is offline and did not receive your message!");
       $(this).remove();
       return $document.one('messageend', function() {
         return $scene.find('.yousad').addClass('hidden');
@@ -722,7 +722,7 @@
       } else if (state.kind === 'scythe') {
         state.kind = null;
         $scythe.css('opacity', 1);
-        return message("You put back the scythe like a nice boy.");
+        return message("You put back the SCYTHE like a nice boy.");
       } else {
         return message("You're already carrying something! You can't take his SCYTHE, brah.");
       }
@@ -736,7 +736,7 @@
     $scene.find('.firegun').removeClass('hidden');
     return setTimeout(function() {
       $scene.find('.brodie').removeClass('hidden');
-      return setTimeout(function() {
+      setTimeout(function() {
         $scene.find('.brodie').remove();
         message("ohgodohgodohgod you just killed your bro ohgodohgodohgod why cant you stop smiling ohgodohgodohgod");
         return $document.one('messageend', function() {
@@ -751,6 +751,9 @@
           });
         });
       }, 1000);
+      return setTimeout(function() {
+        return $scene.addClass('on');
+      }, 200);
     }, 2000);
   };
 
@@ -767,7 +770,7 @@
         message("STEVE: oh no\nSTEVE: is that");
         return $document.one('messageend', function() {
           $scene.find('.monster').removeClass('hidden');
-          message("STEVE: dad?");
+          message("STEVE: mom?");
           return $document.one('messageend', function() {
             $scene.find('.monsterworld').removeClass('hidden');
             message("You are so small.");
@@ -790,6 +793,7 @@
 
   $(function() {
     preloadImage('images/assembly.gif');
+    preloadImage('images/assemblyswitchon.gif');
     preloadImage('images/bro.gif');
     preloadImage('images/brodeathdetail.gif');
     preloadImage('images/brodie.gif');

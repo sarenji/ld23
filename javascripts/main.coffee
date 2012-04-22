@@ -424,7 +424,7 @@ swap = (kind) ->
         when "gun"
           message "You take the UNLOADED GUN and testosterone rips through you. You briefly entertain a name change to Sylvester Stallone."
         when "butcher knife"
-          message "You used to help your FATHER with cooking, back when your mother was pregnant with your bro. You slipped and fell while holding the knife and there was too much blood and... Well, your father's not around anymore."
+          message "You used to help your mother with cooking, while she was pregnant with your bro. You slipped and fell while holding the knife and there was too much blood and... Well, your mother has one eye."
   else if !state.sinkHasStairs
     message """
     You're too short to reach this #{kind.toUpperCase()}. You may be incredibly handsome, but you are still short.
@@ -460,7 +460,7 @@ doorOutside = ->
         when "gun"
           message "You shoot the planks. Or, you would have if the gun were loaded."
         when "hammer"
-          message "You pry the planks out of their foundation. Light filters through the now-open window!"
+          message "You pry the planks out of their foundation. You can see the grass past the open window!"
           $planks.css 'opacity', 0
           state.priedPlanks = true
   $scene.on 'click', '.door', ->
@@ -634,7 +634,7 @@ outsideFakeSun = ->
       $document.one 'messageend', ->
         $scene.find('.switchdetail').removeClass('hidden')
         message """
-        * You began instant messaging LL on your phone!
+        * You began instant messaging LL on your PHONE!
         GQ: ok, wow
         GQ: can you believe this
         GQ: mom wired a switch through the fuckin planet out onto the other side
@@ -719,8 +719,8 @@ broRoom = ->
     * LL is now known as GQ!
     GQ: ok what the noggin????????
     GQ: how are you talking to me?????????
-    LL: Sorry, I should've let you know beforehand.
-    GQ: yeah well um!!!!!!!!!!!!!!!! yeah!!!!!!!!!!
+    LL: Sorry, I should have told you beforehand.
+    GQ: yeah well um!!!!!!!!!!!!!!!! ok!!!!!!!!!!
     LL: Uh, are you okay?
     GQ: hahahaha am i okay?????? do i sound okay to you????? i am perfectly fine! i feel fully alive bro!!!!!
     LL: Uh, all right.
@@ -768,7 +768,7 @@ broRoom = ->
     else if state.kind == 'scythe'
       state.kind = null
       $scythe.css 'opacity', 1
-      message "You put back the scythe like a nice boy."
+      message "You put back the SCYTHE like a nice boy."
     else
       message "You're already carrying something! You can't take his SCYTHE, brah."
 
@@ -791,6 +791,9 @@ fireGunAtSwitch = ->
           hide 'assembly'
           assembly()
     , 1000
+    setTimeout ->
+      $scene.addClass 'on'
+    , 200
   , 2000
 
 endGame = ->
@@ -813,7 +816,7 @@ endGame = ->
       """
       $document.one 'messageend', ->
         $scene.find('.monster').removeClass('hidden')
-        message "STEVE: dad?"
+        message "STEVE: mom?"
         $document.one 'messageend', ->
           $scene.find('.monsterworld').removeClass('hidden')
           message "You are so small."
@@ -830,6 +833,7 @@ game = play1
 # preload images (do after game declaration)
 $ ->
   preloadImage 'images/assembly.gif'
+  preloadImage 'images/assemblyswitchon.gif'
   preloadImage 'images/bro.gif'
   preloadImage 'images/brodeathdetail.gif'
   preloadImage 'images/brodie.gif'
