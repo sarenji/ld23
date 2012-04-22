@@ -185,7 +185,7 @@
     message("* LL began instant messaging you!\nLL: Hello, Steve.\nLL: I just had another revelation.\nGQ: hahaha dude\nGQ: i knew it\nGQ: you have these like every other day\nGQ: every day*\nGQ: ok sorry what is it go on", "LL is typing...");
     return $document.one('messageend', function() {
       $scene.find('.gghouse').removeClass('hidden');
-      message("LL: I think we're in a game.\nGQ: O_O\nLL: No, let me talk.\nLL: So, I've been wondering.\nLL: Our lives really aren't that different from a video game character.\nLL: We level up, we have arbitrary stat attributes, and all that.\nLL: We even have NPCs.", "LL is typing...");
+      message("LL: I think we're in a game.\nGQ: O_O\nLL: No, let me talk.\nLL: So, I've been wondering.\nLL: Our lives really aren't that different from a video game character.\nLL: We level up, we have arbitrary stat attributes, and all that.\nLL: I'm even an NPC.", "LL is typing...");
       return $document.one('messageend', function() {
         $scene.find('.tinyworld').removeClass('hidden');
         message("LL: And our world is called Ludum.\nLL: I don't know, it seems painfully obvious to me now.\nLL: So I did some more sleuthing.\nLL: By which I mean I entered some calculations.", "LL is typing...");

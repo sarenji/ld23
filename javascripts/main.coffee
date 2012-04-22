@@ -166,7 +166,7 @@ scene1 = ->
     LL: So, I've been wondering.
     LL: Our lives really aren't that different from a video game character.
     LL: We level up, we have arbitrary stat attributes, and all that.
-    LL: We even have NPCs.
+    LL: I'm even an NPC.
     """, "LL is typing..."
     $document.one 'messageend', ->
       $scene.find('.tinyworld').removeClass('hidden')
