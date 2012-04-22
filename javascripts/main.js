@@ -707,23 +707,23 @@
   endGame = function() {
     var $scene;
     $scene = show('endscene');
-    message("You look through the telescope.");
+    message("You look through the telescope.  The stars... You feel a rush of power just as you feel small.");
     return $document.one('messageend', function() {
-      message("The stars... You feel a rush of power just as you feel small.");
+      $scene.find('.star').removeClass('hidden');
+      message("STEVE: wait\nSTEVE: what is that");
       return $document.one('messageend', function() {
-        message("STEVE: wait\nSTEVE: what is that");
+        $scene.find('.star').remove();
+        $scene.find('.eye').removeClass('hidden');
+        message("STEVE: oh no\nSTEVE: is that");
         return $document.one('messageend', function() {
-          message("STEVE: oh no\nSTEVE: is that");
+          $scene.find('.monster').removeClass('hidden');
+          message("STEVE: dad?");
           return $document.one('messageend', function() {
-            $scene.find('.monster').removeClass('hidden');
-            message("STEVE: dad?");
+            $scene.find('.monsterworld').removeClass('hidden');
+            message("You are so small.");
             return $document.one('messageend', function() {
-              $scene.find('.monsterworld').removeClass('hidden');
-              message("You are so small.");
-              return $document.one('messageend', function() {
-                hide('endscene');
-                return showCredits();
-              });
+              hide('endscene');
+              return showCredits();
             });
           });
         });

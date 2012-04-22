@@ -753,30 +753,31 @@ fireGunAtSwitch = ->
 endGame = ->
   $scene = show 'endscene'
   # TODO show pic
-  message "You look through the telescope."
+  message "You look through the telescope.
+
+  The stars... You feel a rush of power just as you feel small."
   $document.one 'messageend', ->
-    message "The stars... You feel a rush of power just as you feel small."
+    $scene.find('.star').removeClass('hidden')
+    message """
+    STEVE: wait
+    STEVE: what is that
+    """
     $document.one 'messageend', ->
-      # Show sparkle
+      $scene.find('.star').remove()
+      $scene.find('.eye').removeClass('hidden')
       message """
-      STEVE: wait
-      STEVE: what is that
+      STEVE: oh no
+      STEVE: is that
       """
       $document.one 'messageend', ->
-        # Show monster as 16x16
-        message """
-        STEVE: oh no
-        STEVE: is that
-        """
+        $scene.find('.monster').removeClass('hidden')
+        message "STEVE: dad?"
         $document.one 'messageend', ->
-          $scene.find('.monster').removeClass('hidden')
-          message "STEVE: dad?"
+          $scene.find('.monsterworld').removeClass('hidden')
+          message "You are so small."
           $document.one 'messageend', ->
-            $scene.find('.monsterworld').removeClass('hidden')
-            message "You are so small."
-            $document.one 'messageend', ->
-              hide 'endscene'
-              showCredits()
+            hide 'endscene'
+            showCredits()
 
 showCredits = ->
   $scene = show 'showcredits'

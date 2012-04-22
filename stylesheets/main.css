@@ -249,11 +249,35 @@ a:hover {
   bottom: 0;
   background: url("../images/monsterworld.gif");
 }
+.telescopelens {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/telescopelens.gif");
+}
 .bro {
   position: absolute;
   width: 227px;
   height: 133px;
   background: url("../images/bro.gif");
+}
+.star {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/star.gif") center center no-repeat;
+}
+.eye {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../images/eye.gif") center center no-repeat;
 }
 .yourbroim {
   position: absolute;
