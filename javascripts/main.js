@@ -39,14 +39,18 @@
 
   choice = function(text, okCallback, noCallback) {
     var $choices;
+    show('choicewrapper');
+    hide('choices');
     $choices = show('choices');
     $choices.find('.text').text(text);
     $choices.on('click', '.ok', function() {
       hide('choices');
+      hide('choicewrapper');
       return okCallback();
     });
     return $choices.on('click', '.no', function() {
       hide('choices');
+      hide('choicewrapper');
       return noCallback();
     });
   };
@@ -732,19 +736,28 @@
   };
 
   fireGunAtSwitch = function() {
-    var $scene;
+    var $fireGun, $scene, src;
     $scene = show('assembly');
     $scene.find('.south').addClass('hidden');
-    $scene.find('.firegun').removeClass('hidden');
+    $fireGun = $scene.find('.firegun');
+    $fireGun.removeClass('hidden');
+    src = $fireGun.attr('src');
+    $fireGun.attr('src', '');
+    $fireGun.attr('src', src);
     return setTimeout(function() {
-      $scene.find('.brodie').removeClass('hidden');
+      var $brodie;
+      $brodie = $scene.find('.brodie');
+      $brodie.removeClass('hidden');
+      src = $brodie.attr('src');
+      $brodie.attr('src', '');
+      $brodie.attr('src', src);
       setTimeout(function() {
-        $scene.find('.brodie').remove();
-        message("ohgodohgodohgod you just killed your bro ohgodohgodohgod why cant you stop smiling ohgodohgodohgod      ohgodohgodohgod you need to calm down where is your TELESCOPE ohgodohgodohgod");
+        $brodie.remove();
+        message("ohgodohgodohgod you just killed your bro ohgodohgodohgod why cant you stop smiling ohgodohgodohgod\n\nohgodohgodohgod you need to calm down where is your TELESCOPE ohgodohgodohgod");
         return $document.one('messageend', function() {
           message("You hear a rumbling outside as your bro's future death triggers the switch.");
           return $document.one('messageend', function() {
-            $scene.find('.firegun').remove();
+            $fireGun.remove();
             state.telescope = true;
             $('.telescope').removeClass('hidden');
             $scene.find('.south').removeClass('hidden');

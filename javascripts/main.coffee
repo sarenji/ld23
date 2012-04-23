@@ -30,13 +30,17 @@ find = (id) ->
   $("##{id}")
 
 choice = (text, okCallback, noCallback) ->
+  show 'choicewrapper'
+  hide 'choices'
   $choices = show 'choices'
   $choices.find('.text').text(text)
   $choices.on 'click', '.ok', ->
     hide 'choices'
+    hide 'choicewrapper'
     okCallback()
   $choices.on 'click', '.no', ->
     hide 'choices'
+    hide 'choicewrapper'
     noCallback()
 
 # MESSAGES
@@ -776,18 +780,28 @@ broRoom = ->
 fireGunAtSwitch = ->
   $scene = show 'assembly'
   $scene.find('.south').addClass 'hidden'
-  $scene.find('.firegun').removeClass 'hidden'
+  $fireGun = $scene.find('.firegun')
+  $fireGun.removeClass 'hidden'
+  src = $fireGun.attr('src')
+  $fireGun.attr('src', '')
+  $fireGun.attr('src', src)
   setTimeout ->
-    $scene.find('.brodie').removeClass 'hidden'
+    $brodie = $scene.find('.brodie')
+    $brodie.removeClass 'hidden'
+    src = $brodie.attr('src')
+    $brodie.attr('src', '')
+    $brodie.attr('src', src)
     setTimeout ->
-      $scene.find('.brodie').remove()
-      message "ohgodohgodohgod you just killed your bro ohgodohgodohgod why cant you stop smiling ohgodohgodohgod
+      $brodie.remove()
+      message """
+      ohgodohgodohgod you just killed your bro ohgodohgodohgod why cant you stop smiling ohgodohgodohgod
 
-      ohgodohgodohgod you need to calm down where is your TELESCOPE ohgodohgodohgod"
+      ohgodohgodohgod you need to calm down where is your TELESCOPE ohgodohgodohgod
+      """
       $document.one 'messageend', ->
         message "You hear a rumbling outside as your bro's future death triggers the switch."
         $document.one 'messageend', ->
-          $scene.find('.firegun').remove()
+          $fireGun.remove()
           state.telescope = true
           $('.telescope').removeClass('hidden')
           $scene.find('.south').removeClass 'hidden'
